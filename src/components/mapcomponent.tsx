@@ -9,6 +9,7 @@ const MapComponent = () => {
 
   const map = new Map({ // eslint-disable-line no-new
     target: undefined,
+    controls: [],
     layers: [
       new TileLayer({
         source: new OSM(),
