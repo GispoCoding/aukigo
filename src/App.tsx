@@ -40,7 +40,7 @@ function App() {
 
   return (
     <div className="App">
-      <MapComponent />
+      {(basemaps && <MapComponent props={basemaps} />) || 'loading'}
     </div>
   );
 }
