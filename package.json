@@ -8,8 +8,10 @@
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.12.47",
+    "@types/ol": "^6.3.1",
     "@types/react": "^16.9.38",
     "@types/react-dom": "^16.9.8",
+    "ol": "^6.3.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
@@ -19,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./; exit 0"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -35,5 +38,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "eslint-config-airbnb-typescript": "^8.0.2",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "^2.5.1"
+  },
+  "proxy": "http://ec2-13-53-138-137.eu-north-1.compute.amazonaws.com"
 }
