@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import MapComponent from './components/mapcomponent';
-import getCapabilities from './services/aukigo';
+import getCapabilities from './services/getcapabilities';
 
 interface Basemaps {
   WMTS: [],
@@ -21,7 +21,7 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [capabilities, setCapabilities] = useState<Capabilities>();
   const [basemaps, setBasemaps] = useState<Basemaps>();
-  const [tilesets, setTilesets] = useState<Tilesets[]>([]);
+  const [tilesets, setTilesets] = useState<Tilesets[]>([]); // eslint-disable-line
 
   useEffect(() => {
     getCapabilities()
@@ -38,9 +38,11 @@ function App() {
     }
   }, [loading, capabilities]);
 
+  if (!basemaps) return <div data-testid="loading">Loading...</div>;
   return (
-    <div className="App">
-      {(basemaps && <MapComponent props={basemaps} />) || 'loading'}
+    <div className="App" data-testid="app">
+      <MapComponent data-testid="map" props={basemaps} />
+      {/* {(basemaps && <MapComponent data-testid="map" props={basemaps} />) || 'loading'} */}
     </div>
   );
 }

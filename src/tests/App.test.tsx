@@ -1,10 +1,13 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, cleanup, waitForElement } from '@testing-library/react';
 import App from '../App';
 
+jest.mock('../services/getcapabilities');
+afterEach(cleanup);
+
 describe('App', () => {
-  test('app displays loading', () => {
-    render(<App />);
-    expect(screen.getByText('loading')).toBeInTheDocument();
+  test('app shows loading div', async () => {
+    const { getByText } = render(<App />);
+    await waitForElement(() => getByText('Loading...'));
   });
 });
