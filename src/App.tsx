@@ -38,11 +38,10 @@ function App() {
     }
   }, [loading, capabilities]);
 
-  if (!basemaps) return <div data-testid="loading">Loading...</div>;
+  if (!basemaps) return <div>Loading...</div>;
   return (
-    <div className="App" data-testid="app">
-      <MapComponent data-testid="map" props={basemaps} />
-      {/* {(basemaps && <MapComponent data-testid="map" props={basemaps} />) || 'loading'} */}
+    <div className="App">
+      <MapComponent props={basemaps} />
     </div>
   );
 }
