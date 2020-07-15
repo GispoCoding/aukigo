@@ -2,26 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import MapComponent from './components/mapcomponent';
 import getCapabilities from './services/getcapabilities';
-
-interface Basemaps {
-  WMTS: [],
-  VectorTile: []
-}
-
-interface Tilesets {
-  Tileset: []
-}
-
-interface Capabilities {
-  basemaps: Basemaps,
-  tilesets: Tilesets[],
-}
+import { Capabilities, Basemaps, Tileset } from './types';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [capabilities, setCapabilities] = useState<Capabilities>();
   const [basemaps, setBasemaps] = useState<Basemaps>();
-  const [tilesets, setTilesets] = useState<Tilesets[]>([]); // eslint-disable-line
+  const [tilesets, setTilesets] = useState<Tileset[]>([]); // eslint-disable-line
 
   useEffect(() => {
     getCapabilities()
@@ -38,10 +25,10 @@ function App() {
     }
   }, [loading, capabilities]);
 
-  if (!basemaps) return <div>Loading...</div>;
+  if (!basemaps) { return <div>Loading...</div>; }
   return (
     <div className="App">
-      <MapComponent props={basemaps} />
+      <MapComponent basemaps={basemaps} />
     </div>
   );
 }

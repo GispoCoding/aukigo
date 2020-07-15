@@ -1,18 +1,6 @@
+import { Capabilities } from '../types';
+
 const baseUrl = process.env.REACT_APP_SERVER;
-
-interface Basemaps {
-  WMTS: [],
-  VectorTile: []
-}
-
-interface Tilesets {
-  Tileset: []
-}
-
-interface Capabilities {
-  basemaps: Basemaps,
-  tilesets: Tilesets[],
-}
 
 async function getCapabilities(): Promise<Capabilities> {
   const url = `${baseUrl}/api/capabilities`;

@@ -2,25 +2,17 @@ import React, { useEffect } from 'react';
 import 'ol/ol.css';
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
-import WMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import OLWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities';
 
-interface WMTSLayer {
-  name: string,
-  attribution: string,
-  url: string,
-  layer: string,
-  tile_matrix_set: string
+import { Basemaps } from '../types';
+
+interface MapProps {
+  basemaps: Basemaps
 }
 
-interface MapBasemaps {
-  props: {
-    WMTS: WMTSLayer[],
-    VectorTile: []
-  }
-}
-
-function MapComponent({ props: basemaps }: MapBasemaps) {
+function MapComponent({ basemaps }: MapProps) {
+  const WMTSLayers = basemaps.WMTS;
   const mapContainerStyle = { height: '100%', width: '100%' };
 
   const map = new Map({
@@ -34,7 +26,7 @@ function MapComponent({ props: basemaps }: MapBasemaps) {
 
   useEffect(() => {
     map.setTarget('map');
-    const baseLayer = basemaps.WMTS[0];
+    const baseLayer = WMTSLayers[0];
     const parser = new WMTSCapabilities();
     fetch(baseLayer.url)
       .then((response) => response.text())
@@ -45,10 +37,10 @@ function MapComponent({ props: basemaps }: MapBasemaps) {
           matrixSet: baseLayer.tile_matrix_set,
         });
         map.addLayer(new TileLayer({
-          source: new WMTS(options),
+          source: new OLWMTS(options),
         }));
       });
-  }, [map, basemaps]);
+  }, [map, WMTSLayers]);
 
   return (
     <div style={mapContainerStyle}>
