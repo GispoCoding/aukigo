@@ -8,27 +8,27 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [capabilities, setCapabilities] = useState<Capabilities>();
   const [basemaps, setBasemaps] = useState<Basemaps>();
-  const [tilesets, setTilesets] = useState<Tileset[]>([]); // eslint-disable-line
+  const [tilesets, setTilesets] = useState<Tileset[]>([]);
 
   useEffect(() => {
     getCapabilities()
       .then((response) => {
         setCapabilities(response);
-        setLoading(false);
       });
   }, []);
 
   useEffect(() => {
-    if (!loading) {
+    if (capabilities) {
       setBasemaps(capabilities!.basemaps);
       setTilesets(capabilities!.tilesets);
+      setLoading(false);
     }
-  }, [loading, capabilities]);
+  }, [capabilities]);
 
-  if (!basemaps) { return <div>Loading...</div>; }
+  if (loading) { return <div>Loading...</div>; }
   return (
     <div className="App">
-      <MapComponent basemaps={basemaps} />
+      <MapComponent basemaps={basemaps!} tilesets={tilesets!} />
     </div>
   );
 }
