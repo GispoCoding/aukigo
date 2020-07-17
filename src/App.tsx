@@ -10,6 +10,7 @@ function App() {
   const [basemaps, setBasemaps] = useState<Basemaps>();
   const [tilesets, setTilesets] = useState<Tileset[]>([]);
 
+  // Get capabilities document from backend
   useEffect(() => {
     getCapabilities()
       .then((response) => {
@@ -17,13 +18,18 @@ function App() {
       });
   }, []);
 
+  // Set basemaps and tilesets
   useEffect(() => {
     if (capabilities) {
       setBasemaps(capabilities!.basemaps);
       setTilesets(capabilities!.tilesets);
-      setLoading(false);
     }
   }, [capabilities]);
+
+  // Unset loading when ready
+  useEffect(() => {
+    if (basemaps && tilesets) { setLoading(false); }
+  }, [basemaps, tilesets]);
 
   if (loading) { return <div>Loading...</div>; }
   return (
