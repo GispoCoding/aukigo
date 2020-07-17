@@ -7,7 +7,6 @@ async function getCapabilities(): Promise<Capabilities> {
   const options = {
     headers: {
       Accept: 'application/json',
-      redirect: 'follow',
     },
   };
   try {
