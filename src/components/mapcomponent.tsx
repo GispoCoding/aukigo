@@ -59,7 +59,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
   const [activeTileLayer, setActiveTileLayer] = useState<Tileset>();
   const mapContainerStyle = { height: '100%', width: '100%' };
 
-  const map = new Map({
+  const olMap = new Map({
     target: undefined,
     controls: [],
     view: new View({
@@ -68,8 +68,14 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     }),
   });
 
+  // Set the ol map target on initial render
   useEffect(() => {
-    map.setTarget('map');
+    olMap.setTarget('map');
+    return () => olMap.setTarget(undefined);
+  }, []);
+
+  // Set initial WMTS basemap and vectortilelayer
+  useEffect(() => {
     const baseLayer = WMTSLayers[0];
     const parser = new WMTSCapabilities();
     fetch(baseLayer.url)
@@ -80,7 +86,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
           layer: baseLayer.layer,
           matrixSet: baseLayer.tile_matrix_set,
         });
-        map.addLayer(new TileLayer({
+        olMap.addLayer(new TileLayer({
           source: new OLWMTS(options),
           zIndex: -1,
         }));
@@ -93,7 +99,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
       source: vectorTileSource,
       style: mapStyles.pointStyle,
     });
-    map.addLayer(vectorLayer);
+    olMap.addLayer(vectorLayer);
     const layerCenter = transform(
       [defaultLayer.center[0], defaultLayer.center[1]],
       'EPSG:4326', 'EPSG:3857',
@@ -102,8 +108,8 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
       center: layerCenter,
       zoom: defaultLayer.center[2],
     });
-    map.setView(updatedView);
-  }, [map, WMTSLayers, tilesets]);
+    olMap.setView(updatedView);
+  }, [olMap, WMTSLayers, tilesets]);
 
   return (
     <div style={mapContainerStyle}>
