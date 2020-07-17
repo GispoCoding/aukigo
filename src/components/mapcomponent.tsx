@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import 'ol/ol.css';
-import { Map, View } from 'ol';
+import {Map, View} from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import VectorTileLayer from 'ol/layer/VectorTile';
-import VectorTileSource, { Options as VectorTileOptions } from 'ol/source/VectorTile';
-import OLWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import VectorTileSource, {Options as VectorTileOptions} from 'ol/source/VectorTile';
+import OLWMTS, {optionsFromCapabilities} from 'ol/source/WMTS';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities';
-import { transform } from 'ol/proj';
-import { Fill, Stroke, Style } from 'ol/style';
+import {transform} from 'ol/proj';
+import {Fill, Stroke, Style} from 'ol/style';
 import MVT from 'ol/format/MVT';
 
-import { Basemaps, Tileset } from '../types';
+import {Basemaps, Tileset} from '../types';
 
 interface MapProps {
   basemaps: Basemaps,
   tilesets: Tileset[]
 }
 
+// TODO: Style should be geometry type dependent, current mapStyle does not work for points
 const mapStyle = new Style({
   stroke: new Stroke({
     color: 'gray',
@@ -33,7 +34,7 @@ const createVectorTileSource = (tileset: Tileset):VectorTileSource => {
     format: new MVT(),
     maxZoom: tileset.maxzoom,
     minZoom: tileset.minzoom,
-    url: tileset.url,
+    url: tileset.tiles[0],
   };
   const vt = new VectorTileSource(options);
   return vt;
@@ -67,6 +68,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
         });
         map.addLayer(new TileLayer({
           source: new OLWMTS(options),
+          zIndex: -1,
         }));
       });
 
@@ -75,7 +77,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     const vectorTileSource = createVectorTileSource(defaultLayer);
     const vectorLayer = new VectorTileLayer({
       source: vectorTileSource,
-      style: mapStyle,
+      // style: mapStyle,
     });
     map.addLayer(vectorLayer);
     const layerCenter = transform(
