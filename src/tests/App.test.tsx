@@ -5,6 +5,7 @@ import getCapabilities from '../services/getcapabilities';
 import testCapabilities from './data/getcapabilities';
 
 jest.mock('../services/getcapabilities');
+jest.mock('../components/mapcomponent');
 
 afterEach(() => {
   jest.clearAllMocks();
