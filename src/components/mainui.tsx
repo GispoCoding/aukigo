@@ -1,32 +1,46 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { Grid } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles';
 import Header from './header';
+import LayerSelector from './layerselector';
 import theme from '../theme';
 
+const useStyles = makeStyles(() => (
+  createStyles({
+    root: {
+      flexGrow: 1,
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      minHeight: '100vh',
+      pointerEvents: 'none',
+      zIndex: 100,
+    },
+    header: {
+      flexGrow: 1,
+    },
+  })
+));
+
 export default function MainUI() {
-  const mainContainerStyle: CSSProperties = {
-    zIndex: 100,
-    position: 'fixed',
-    left: 0,
-    top: 0,
-    width: '100vw',
-    height: '100vh',
-    // border: '5px solid red',
-  };
+  const classes = useStyles();
 
   return (
     <ThemeProvider theme={theme}>
       <Grid
         container
-        style={mainContainerStyle}
+        className={classes.root}
         direction="column"
+        justify="flex-start"
+        spacing={0}
+        xs={12}
       >
-        <Grid item>
+        <Grid item className={classes.header}>
           <Header />
         </Grid>
-        <Grid item>Placeholder layerselector</Grid>
-        <Grid item>Placeholder component</Grid>
+        <Grid item>
+          <LayerSelector />
+        </Grid>
       </Grid>
     </ThemeProvider>
   );

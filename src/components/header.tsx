@@ -1,18 +1,25 @@
 import React from 'react';
 import {
   AppBar, Toolbar, IconButton, Typography, Button,
-  makeStyles, createStyles,
+  makeStyles, createStyles, Grid,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => (
   createStyles({
+    root: {
+      margin: '30px auto 0 auto',
+      flexGrow: 1,
+      pointerEvents: 'auto',
+    },
     mainBar: {
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.secondary.main,
-      width: '90vw',
-      position: 'unset',
-      margin: 'auto',
-      marginTop: '3vh',
+    },
+    logo: {
+      marginRight: '20px',
+    },
+    descTxt: {
+      flexGrow: 1,
     },
   })
 ));
@@ -20,18 +27,29 @@ const useStyles = makeStyles((theme) => (
 export default function Header() {
   const classes = useStyles();
   return (
-    <div>
-      <AppBar className={classes.mainBar}>
+    <Grid
+      className={classes.root}
+      direction="row"
+      item
+      sm={11}
+      xs={12}
+    >
+      <AppBar
+        className={classes.mainBar}
+        position="static"
+      >
         <Toolbar>
-          <IconButton edge="start">
-            aukigo logo here
+          <IconButton className={classes.logo}>
+            aukigo
           </IconButton>
-          <Typography>
+          <Typography className={classes.descTxt}>
             Some text
           </Typography>
-          <Button>Button</Button>
+          <Button>
+            Button
+          </Button>
         </Toolbar>
       </AppBar>
-    </div>
+    </Grid>
   );
 }

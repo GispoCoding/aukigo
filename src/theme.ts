@@ -15,13 +15,6 @@ declare module '@material-ui/core/styles/createMuiTheme' {
 }
 
 const defaultTheme = createMuiTheme({
-  overrides: {
-    MuiGrid: {
-      item: {
-        pointerEvents: 'auto',
-      },
-    },
-  },
   palette: {
     primary: blue,
     secondary: orange,
