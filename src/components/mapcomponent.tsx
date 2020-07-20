@@ -1,32 +1,46 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import 'ol/ol.css';
-import {Map, View} from 'ol';
+import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import VectorTileLayer from 'ol/layer/VectorTile';
-import VectorTileSource, {Options as VectorTileOptions} from 'ol/source/VectorTile';
-import OLWMTS, {optionsFromCapabilities} from 'ol/source/WMTS';
+import VectorTileSource, { Options as VectorTileOptions } from 'ol/source/VectorTile';
+import OLWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities';
-import {transform} from 'ol/proj';
-import {Fill, Stroke, Style} from 'ol/style';
+import { transform } from 'ol/proj';
+import { Fill, Stroke, Style } from 'ol/style';
+import CircleStyle from 'ol/style/Circle';
 import MVT from 'ol/format/MVT';
 
-import {Basemaps, Tileset} from '../types';
+import { Basemaps, Tileset } from '../types';
 
 interface MapProps {
   basemaps: Basemaps,
   tilesets: Tileset[]
 }
 
-// TODO: Style should be geometry type dependent, current mapStyle does not work for points
-const mapStyle = new Style({
-  stroke: new Stroke({
-    color: 'gray',
-    width: 1,
+const mapStyles = {
+  polyStyle: new Style({
+    stroke: new Stroke({
+      color: 'orange',
+      width: 1,
+    }),
+    fill: new Fill({
+      color: 'rgba(20,20,20,0.9',
+    }),
   }),
-  fill: new Fill({
-    color: 'rgba(20,20,20,0.9',
+  pointStyle: new Style({
+    image: new CircleStyle({
+      radius: 5,
+      fill: new Fill({
+        color: '#666666',
+      }),
+      stroke: new Stroke({
+        color: '#ffffff',
+        width: 1,
+      }),
+    }),
   }),
-});
+};
 
 const createVectorTileSource = (tileset: Tileset):VectorTileSource => {
   const options: VectorTileOptions = {
@@ -77,7 +91,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     const vectorTileSource = createVectorTileSource(defaultLayer);
     const vectorLayer = new VectorTileLayer({
       source: vectorTileSource,
-      // style: mapStyle,
+      style: mapStyles.pointStyle,
     });
     map.addLayer(vectorLayer);
     const layerCenter = transform(
