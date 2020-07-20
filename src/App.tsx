@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import MapComponent from './components/mapcomponent';
+import MainUI from './components/mainui';
 import getCapabilities from './services/getcapabilities';
 import { Capabilities, Basemaps, Tileset } from './types';
 
@@ -34,6 +35,7 @@ function App() {
   if (loading) { return <div>Loading...</div>; }
   return (
     <div className="App">
+      <MainUI />
       <MapComponent basemaps={basemaps!} tilesets={tilesets!} />
     </div>
   );
