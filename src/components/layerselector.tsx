@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme: Theme) => (
       margin: 'auto',
       pointerEvents: 'auto',
       flexGrow: 1,
+      [theme.breakpoints.up('md')]: {
+        position: 'absolute',
+        bottom: '30px',
+        right: '30px',
+      },
     },
     layerSelButton: {
       minWidth: '100%',
@@ -31,6 +36,7 @@ export default function LayerSelector() {
       direction="row"
       justify="space-evenly"
       spacing={3}
+      md={6}
       sm={11}
       xs={12}
     >
