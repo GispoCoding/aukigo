@@ -1,26 +1,62 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'ol/ol.css';
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
-import WMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
+import VectorTileLayer from 'ol/layer/VectorTile';
+import VectorTileSource, { Options as VectorTileOptions } from 'ol/source/VectorTile';
+import OLWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities';
+import { transform } from 'ol/proj';
+import { Fill, Stroke, Style } from 'ol/style';
+import CircleStyle from 'ol/style/Circle';
+import MVT from 'ol/format/MVT';
 
-interface WMTSLayer {
-  name: string,
-  attribution: string,
-  url: string,
-  layer: string,
-  tile_matrix_set: string
+import { Basemaps, Tileset } from '../types';
+
+interface MapProps {
+  basemaps: Basemaps,
+  tilesets: Tileset[]
 }
 
-interface MapBasemaps {
-  props: {
-    WMTS: WMTSLayer[],
-    VectorTile: []
-  }
-}
+const mapStyles = {
+  polyStyle: new Style({
+    stroke: new Stroke({
+      color: 'orange',
+      width: 1,
+    }),
+    fill: new Fill({
+      color: 'rgba(20,20,20,0.9',
+    }),
+  }),
+  pointStyle: new Style({
+    image: new CircleStyle({
+      radius: 5,
+      fill: new Fill({
+        color: '#666666',
+      }),
+      stroke: new Stroke({
+        color: '#ffffff',
+        width: 1,
+      }),
+    }),
+  }),
+};
 
-function MapComponent({ props: basemaps }: MapBasemaps) {
+const createVectorTileSource = (tileset: Tileset):VectorTileSource => {
+  const options: VectorTileOptions = {
+    attributions: tileset.attribution,
+    format: new MVT(),
+    maxZoom: tileset.maxzoom,
+    minZoom: tileset.minzoom,
+    url: tileset.tiles[0],
+  };
+  const vt = new VectorTileSource(options);
+  return vt;
+};
+
+function MapComponent({ basemaps, tilesets }: MapProps) {
+  const WMTSLayers = basemaps.WMTS;
+  const [activeTileLayer, setActiveTileLayer] = useState<Tileset>();
   const mapContainerStyle = { height: '100%', width: '100%' };
 
   const map = new Map({
@@ -34,7 +70,7 @@ function MapComponent({ props: basemaps }: MapBasemaps) {
 
   useEffect(() => {
     map.setTarget('map');
-    const baseLayer = basemaps.WMTS[0];
+    const baseLayer = WMTSLayers[0];
     const parser = new WMTSCapabilities();
     fetch(baseLayer.url)
       .then((response) => response.text())
@@ -45,10 +81,29 @@ function MapComponent({ props: basemaps }: MapBasemaps) {
           matrixSet: baseLayer.tile_matrix_set,
         });
         map.addLayer(new TileLayer({
-          source: new WMTS(options),
+          source: new OLWMTS(options),
+          zIndex: -1,
         }));
       });
-  }, [map, basemaps]);
+
+    const defaultLayer = tilesets[0];
+    setActiveTileLayer(defaultLayer);
+    const vectorTileSource = createVectorTileSource(defaultLayer);
+    const vectorLayer = new VectorTileLayer({
+      source: vectorTileSource,
+      style: mapStyles.pointStyle,
+    });
+    map.addLayer(vectorLayer);
+    const layerCenter = transform(
+      [defaultLayer.center[0], defaultLayer.center[1]],
+      'EPSG:4326', 'EPSG:3857',
+    );
+    const updatedView = new View({
+      center: layerCenter,
+      zoom: defaultLayer.center[2],
+    });
+    map.setView(updatedView);
+  }, [map, WMTSLayers, tilesets]);
 
   return (
     <div style={mapContainerStyle}>
