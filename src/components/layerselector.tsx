@@ -33,6 +33,7 @@ export default function LayerSelector() {
       alignItems="center"
       className={classes.root}
       container
+      item
       direction="row"
       justify="space-evenly"
       spacing={3}
