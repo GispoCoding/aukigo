@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useRef, useState,
+} from 'react';
 import 'ol/ol.css';
-import { Map, View } from 'ol';
+import {
+  Map, MapBrowserEvent, Overlay, View,
+} from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource, { Options as VectorTileOptions } from 'ol/source/VectorTile';
@@ -11,6 +15,7 @@ import { Fill, Stroke, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import MVT from 'ol/format/MVT';
 
+import OverlayPositioning from 'ol/OverlayPositioning';
 import { Basemaps, Tileset } from '../types';
 
 interface MapProps {
@@ -50,32 +55,63 @@ const createVectorTileSource = (tileset: Tileset):VectorTileSource => {
     minZoom: tileset.minzoom,
     url: tileset.tiles[0],
   };
-  const vt = new VectorTileSource(options);
-  return vt;
+  return new VectorTileSource(options);
 };
 
 function MapComponent({ basemaps, tilesets }: MapProps) {
+  const [olMap, setOlMap] = useState<Map>();
   const WMTSLayers = basemaps.WMTS;
   const [activeTileLayer, setActiveTileLayer] = useState<Tileset>();
   const mapContainerStyle = { height: '100%', width: '100%' };
+  const [popup, setPopup] = useState<Overlay>();
 
-  const olMap = new Map({
-    target: undefined,
-    controls: [],
-    view: new View({
-      center: [2478699.953232, 8501593.815476],
-      zoom: 14,
-    }),
-  });
+  const mapRef = useRef(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
-  // Set the ol map target on initial render
+  // const olMap = new Map({
   useEffect(() => {
-    olMap.setTarget('map');
-    return () => olMap.setTarget(undefined);
+    setOlMap(new Map({
+      target: undefined,
+      controls: [],
+      view: new View({
+        center: [2478699.953232, 8501593.815476],
+        zoom: 14,
+      }),
+    }));
   }, []);
 
-  // Set initial WMTS basemap and vectortilelayer
   useEffect(() => {
+    if (olMap) {
+      olMap?.setTarget(mapRef.current!);
+      setPopup(new Overlay({
+        element: popupRef.current!,
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250,
+        },
+        positioning: OverlayPositioning.CENTER_CENTER,
+      }));
+    }
+    return () => olMap?.setTarget(undefined);
+  }, [olMap]);
+
+  useEffect(() => {
+    if (!olMap || !popup) return;
+    if (!olMap.getOverlays().getLength()) olMap.addOverlay(popup);
+  }, [olMap, popup]);
+
+  useEffect(() => {
+    if (!olMap || !popup) return;
+    olMap.on('click', (evt: MapBrowserEvent) => {
+      popup.setPosition(evt.coordinate);
+      if (popupRef.current === null) return;
+      popupRef.current.innerHTML = '<h1>feature</h1>';
+    });
+  }, [olMap, popup]);
+
+  // Set initial WMTS basemap and VectorTileLayer
+  useEffect(() => {
+    if (!olMap) return;
     const baseLayer = WMTSLayers[0];
     const parser = new WMTSCapabilities();
     fetch(baseLayer.url)
@@ -113,7 +149,13 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
 
   return (
     <div style={mapContainerStyle}>
-      <div id="map" style={mapContainerStyle} />
+      <div style={mapContainerStyle} ref={mapRef} />
+      <div
+        ref={popupRef}
+        style={{
+          width: '30px', height: '30px', border: '1px solid red', backgroundColor: '#0FF', zIndex: 9999,
+        }}
+      />
     </div>
   );
 }
