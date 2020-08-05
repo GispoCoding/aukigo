@@ -58,9 +58,25 @@ const createVectorTileSource = (tileset: Tileset):VectorTileSource => {
   return new VectorTileSource(options);
 };
 
+interface FeatureProperties {
+  [key: string]: any,
+}
+
+const popupContentFromFeatureProperties = (properties: FeatureProperties) => {
+  const title = properties.name_fi ? properties.name_fi : properties.name;
+  const website = properties.website ? properties.website : '';
+  let resultHTML = `<h1>${title}</h1><a href=${website}>${website}</a><table>`;
+  Object.keys(properties).forEach((key) => {
+    resultHTML += `<tr><td>${key}<td><td>${properties[key]}</td><tr />`;
+  });
+  resultHTML += '</table>';
+  return resultHTML;
+};
+
 function MapComponent({ basemaps, tilesets }: MapProps) {
   const [olMap, setOlMap] = useState<Map>();
   const WMTSLayers = basemaps.WMTS;
+  // eslint-disable-next-line
   const [activeTileLayer, setActiveTileLayer] = useState<Tileset>();
   const mapContainerStyle = { height: '100%', width: '100%' };
   const [popup, setPopup] = useState<Overlay>();
@@ -106,16 +122,16 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
   useEffect(() => {
     if (!olMap || !popup) return;
     olMap.on('click', (evt: MapBrowserEvent) => {
+      if (popupRef.current === null) return;
       const features = olMap.getFeaturesAtPixel(evt.pixel);
       if (features.length === 0) {
-        popupRef.current!.hidden = true;
+        popupRef.current.hidden = true;
         return;
       }
       popup.setPosition(evt.coordinate);
-      popupRef.current!.hidden = false;
-      if (popupRef.current === null) return;
+      popupRef.current.hidden = false;
       const properties = features[0].getProperties();
-      popupRef.current.innerHTML = JSON.stringify(properties, null, 2);
+      popupRef.current.innerHTML = popupContentFromFeatureProperties(properties);
     });
   }, [olMap, popup]);
 
