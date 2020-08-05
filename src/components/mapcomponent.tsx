@@ -68,7 +68,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
   const mapRef = useRef(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
-  // const olMap = new Map({
+  // Create Map
   useEffect(() => {
     setOlMap(new Map({
       target: undefined,
@@ -80,6 +80,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     }));
   }, []);
 
+  // Set olMap target and create popup Overlay
   useEffect(() => {
     if (olMap) {
       olMap?.setTarget(mapRef.current!);
@@ -95,17 +96,26 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     return () => olMap?.setTarget(undefined);
   }, [olMap]);
 
+  // Add popup Overlay to map
   useEffect(() => {
     if (!olMap || !popup) return;
     if (!olMap.getOverlays().getLength()) olMap.addOverlay(popup);
   }, [olMap, popup]);
 
+  // Create map click event listener
   useEffect(() => {
     if (!olMap || !popup) return;
     olMap.on('click', (evt: MapBrowserEvent) => {
+      const features = olMap.getFeaturesAtPixel(evt.pixel);
+      if (features.length === 0) {
+        popupRef.current!.hidden = true;
+        return;
+      }
       popup.setPosition(evt.coordinate);
+      popupRef.current!.hidden = false;
       if (popupRef.current === null) return;
-      popupRef.current.innerHTML = '<h1>feature</h1>';
+      const properties = features[0].getProperties();
+      popupRef.current.innerHTML = JSON.stringify(properties, null, 2);
     });
   }, [olMap, popup]);
 
@@ -153,7 +163,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
       <div
         ref={popupRef}
         style={{
-          width: '30px', height: '30px', border: '1px solid red', backgroundColor: '#0FF', zIndex: 9999,
+          border: '1px solid black', backgroundColor: '#FFF',
         }}
       />
     </div>
