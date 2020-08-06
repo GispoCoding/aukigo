@@ -40,6 +40,12 @@ export interface Tileset {
   style: any[];
 }
 
+export enum GeometryType {
+  Polygon = '_pl',
+  Point = '_p',
+  Line = '_l'
+}
+
 export enum Attribution {
   AHrefHTTPOpenstreetmapOrgOSMContributorsA = "<a href='http://openstreetmap.org'>OSM contributors</a>",
 }

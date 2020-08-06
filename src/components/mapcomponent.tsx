@@ -1,6 +1,4 @@
-import React, {
-  useEffect, useRef, useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'ol/ol.css';
 import {
   Map, MapBrowserEvent, Overlay, View,
@@ -16,7 +14,7 @@ import CircleStyle from 'ol/style/Circle';
 import MVT from 'ol/format/MVT';
 
 import OverlayPositioning from 'ol/OverlayPositioning';
-import { Basemaps, Tileset } from '../types';
+import { Basemaps, GeometryType, Tileset } from '../types';
 
 interface MapProps {
   basemaps: Basemaps,
@@ -33,6 +31,12 @@ const mapStyles = {
       color: 'rgba(20,20,20,0.9',
     }),
   }),
+  lineStyle: new Style({
+    stroke: new Stroke({
+      color: '#d900ff',
+      width: 2,
+    }),
+  }),
   pointStyle: new Style({
     image: new CircleStyle({
       radius: 5,
@@ -47,13 +51,13 @@ const mapStyles = {
   }),
 };
 
-const createVectorTileSource = (tileset: Tileset):VectorTileSource => {
+const createVectorTileSource = (tileset: Tileset, layerIndex: number): VectorTileSource => {
   const options: VectorTileOptions = {
     attributions: tileset.attribution,
     format: new MVT(),
     maxZoom: tileset.maxzoom,
     minZoom: tileset.minzoom,
-    url: tileset.tiles[0],
+    url: tileset.tiles[layerIndex],
   };
   return new VectorTileSource(options);
 };
@@ -138,6 +142,11 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
   // Set initial WMTS basemap and VectorTileLayer
   useEffect(() => {
     if (!olMap) return;
+
+    // Clear layers
+    const layers = [...olMap.getLayers().getArray()];
+    layers.forEach((layer) => olMap.removeLayer(layer));
+
     const baseLayer = WMTSLayers[0];
     const parser = new WMTSCapabilities();
     fetch(baseLayer.url)
@@ -156,12 +165,27 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
 
     const defaultLayer = tilesets[0];
     setActiveTileLayer(defaultLayer);
-    const vectorTileSource = createVectorTileSource(defaultLayer);
-    const vectorLayer = new VectorTileLayer({
-      source: vectorTileSource,
-      style: mapStyles.pointStyle,
+
+    // Add layers
+    defaultLayer.vector_layers.forEach((layerName, layerIndex) => {
+      const vectorTileSource = createVectorTileSource(defaultLayer, layerIndex);
+
+      const ending: string = `_${layerName.split('_').slice(-1)[0]}`;
+
+      let style: Style = mapStyles.pointStyle;
+      if (ending === GeometryType.Polygon) {
+        style = mapStyles.polyStyle;
+      } else if (ending === GeometryType.Line) {
+        style = mapStyles.lineStyle;
+      }
+
+      const vectorLayer = new VectorTileLayer({
+        source: vectorTileSource,
+        style,
+      });
+      olMap.addLayer(vectorLayer);
     });
-    olMap.addLayer(vectorLayer);
+
     const layerCenter = transform(
       [defaultLayer.center[0], defaultLayer.center[1]],
       'EPSG:4326', 'EPSG:3857',
