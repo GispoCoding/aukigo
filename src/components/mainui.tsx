@@ -29,6 +29,7 @@ export default function MainUI() {
     <ThemeProvider theme={theme}>
       <Grid
         container
+        item
         className={classes.root}
         direction="column"
         justify="flex-start"
