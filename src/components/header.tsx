@@ -10,6 +10,10 @@ import {
 import { Search, Settings } from '@material-ui/icons';
 import { Grid } from '@material-ui/core';
 
+interface HeaderProps {
+  onToggleBasemap: Function
+}
+
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     backgroundColor: theme.palette.primary.main,
@@ -77,7 +81,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export default function Header() {
+export default function Header({ onToggleBasemap }: HeaderProps) {
   const classes = useStyles();
 
   return (
@@ -106,7 +110,7 @@ export default function Header() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={() => onToggleBasemap()}>
             <Settings />
           </IconButton>
         </Toolbar>

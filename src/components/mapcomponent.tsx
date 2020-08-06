@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import 'ol/ol.css';
 import {
   Map, MapBrowserEvent, Overlay, View,
@@ -79,14 +81,22 @@ const popupContentFromFeatureProperties = (properties: FeatureProperties) => {
 
 function MapComponent({ basemaps, tilesets }: MapProps) {
   const [olMap, setOlMap] = useState<Map>();
-  const WMTSLayers = basemaps.WMTS;
   // eslint-disable-next-line
-  const [activeTileLayer, setActiveTileLayer] = useState<Tileset>();
   const mapContainerStyle = { height: '100%', width: '100%' };
   const [popup, setPopup] = useState<Overlay>();
 
   const mapRef = useRef(null);
   const popupRef = useRef<HTMLDivElement>(null);
+
+  // Clear layers that are not included
+  const removeOldLayers = useCallback(() => {
+    const layerNames: string[] = [...tilesets.map((tileset) => tileset.name),
+      ...basemaps.WMTS.map((layer) => layer.name),
+      ...basemaps.vectorTile.map((layer) => layer.name)];
+    const layersToRemove = olMap!.getLayers().getArray()
+      .filter((layer) => !layerNames.includes(layer.get('name')));
+    layersToRemove.forEach((layer) => olMap!.removeLayer(layer));
+  }, [olMap, tilesets, basemaps]);
 
   // Create Map
   useEffect(() => {
@@ -139,63 +149,68 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     });
   }, [olMap, popup]);
 
-  // Set initial WMTS basemap and VectorTileLayer
   useEffect(() => {
     if (!olMap) return;
 
-    // Clear layers
-    const layers = [...olMap.getLayers().getArray()];
-    layers.forEach((layer) => olMap.removeLayer(layer));
-
-    const baseLayer = WMTSLayers[0];
-    const parser = new WMTSCapabilities();
-    fetch(baseLayer.url)
-      .then((response) => response.text())
-      .then((text) => {
-        const result = parser.read(text);
-        const options = optionsFromCapabilities(result, {
-          layer: baseLayer.layer,
-          matrixSet: baseLayer.tile_matrix_set,
+    removeOldLayers();
+    if (basemaps.WMTS.length) {
+      const baseLayer = basemaps.WMTS[0];
+      const parser = new WMTSCapabilities();
+      fetch(baseLayer.url)
+        .then((response) => response.text())
+        .then((text) => {
+          const result = parser.read(text);
+          const options = optionsFromCapabilities(result, {
+            layer: baseLayer.layer,
+            matrixSet: baseLayer.tile_matrix_set,
+          });
+          olMap.addLayer(new TileLayer({
+            source: new OLWMTS(options),
+            zIndex: -1,
+          }));
         });
-        olMap.addLayer(new TileLayer({
-          source: new OLWMTS(options),
-          zIndex: -1,
-        }));
+    } else {
+      // TODO: Add support for vector tile basemaps
+    }
+  }, [olMap, basemaps, removeOldLayers]);
+
+  // Set Vector layers
+  useEffect(() => {
+    if (!olMap) return;
+
+    removeOldLayers();
+    tilesets.forEach((tileset) => {
+      // Add layers
+      tileset.vector_layers.forEach((layerName, layerIndex) => {
+        const vectorTileSource = createVectorTileSource(tileset, layerIndex);
+
+        const ending: string = `_${layerName.split('_').slice(-1)[0]}`;
+
+        let style: Style = mapStyles.pointStyle;
+        if (ending === GeometryType.Polygon) {
+          style = mapStyles.polyStyle;
+        } else if (ending === GeometryType.Line) {
+          style = mapStyles.lineStyle;
+        }
+
+        const vectorLayer = new VectorTileLayer({
+          source: vectorTileSource,
+          style,
+        });
+        olMap.addLayer(vectorLayer);
       });
 
-    const defaultLayer = tilesets[0];
-    setActiveTileLayer(defaultLayer);
-
-    // Add layers
-    defaultLayer.vector_layers.forEach((layerName, layerIndex) => {
-      const vectorTileSource = createVectorTileSource(defaultLayer, layerIndex);
-
-      const ending: string = `_${layerName.split('_').slice(-1)[0]}`;
-
-      let style: Style = mapStyles.pointStyle;
-      if (ending === GeometryType.Polygon) {
-        style = mapStyles.polyStyle;
-      } else if (ending === GeometryType.Line) {
-        style = mapStyles.lineStyle;
-      }
-
-      const vectorLayer = new VectorTileLayer({
-        source: vectorTileSource,
-        style,
+      const layerCenter = transform(
+        [tileset.center[0], tileset.center[1]],
+        'EPSG:4326', 'EPSG:3857',
+      );
+      const updatedView = new View({
+        center: layerCenter,
+        zoom: tileset.center[2],
       });
-      olMap.addLayer(vectorLayer);
+      olMap.setView(updatedView);
     });
-
-    const layerCenter = transform(
-      [defaultLayer.center[0], defaultLayer.center[1]],
-      'EPSG:4326', 'EPSG:3857',
-    );
-    const updatedView = new View({
-      center: layerCenter,
-      zoom: defaultLayer.center[2],
-    });
-    olMap.setView(updatedView);
-  }, [olMap, WMTSLayers, tilesets]);
+  }, [olMap, tilesets, removeOldLayers]);
 
   return (
     <div style={mapContainerStyle}>

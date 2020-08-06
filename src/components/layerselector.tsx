@@ -1,10 +1,14 @@
 import React from 'react';
 import {
-  Grid, makeStyles, createStyles, IconButton, Paper, Theme,
+  Grid, makeStyles, createStyles, IconButton, Paper, Theme, Tooltip,
 } from '@material-ui/core';
 import {
   AcUnit, Accessible, AccountBalance, AccountCircle, Apartment,
 } from '@material-ui/icons';
+
+interface LayerSelectorProps {
+  onToggleLayer: Function
+}
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
@@ -26,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => (
   })
 ));
 
-export default function LayerSelector() {
+export default function LayerSelector({ onToggleLayer }: LayerSelectorProps) {
   const classes = useStyles();
   return (
     <Grid
@@ -43,35 +47,47 @@ export default function LayerSelector() {
     >
       <Grid item xs>
         <Paper>
-          <IconButton className={classes.layerSelButton}>
-            <AcUnit />
-          </IconButton>
+          <Tooltip title="Lodging">
+            <IconButton className={classes.layerSelButton} onClick={() => onToggleLayer('Lodging')}>
+              <AcUnit />
+            </IconButton>
+          </Tooltip>
         </Paper>
       </Grid>
       <Grid item xs>
         <Paper>
-          <IconButton className={classes.layerSelButton}>
-            <Accessible />
-          </IconButton>
+          <Tooltip title="Shops">
+            <IconButton className={classes.layerSelButton} onClick={() => onToggleLayer('Shops')}>
+              <Accessible />
+            </IconButton>
+          </Tooltip>
         </Paper>
       </Grid>
       <Grid item xs>
         <Paper>
-          <IconButton className={classes.layerSelButton}><AccountBalance /></IconButton>
+          <Tooltip title="Finance">
+            <IconButton className={classes.layerSelButton} onClick={() => onToggleLayer('Finance')}>
+              <AccountBalance />
+            </IconButton>
+          </Tooltip>
         </Paper>
       </Grid>
       <Grid item xs>
         <Paper>
-          <IconButton className={classes.layerSelButton}>
-            <AccountCircle />
-          </IconButton>
+          <Tooltip title="Health">
+            <IconButton className={classes.layerSelButton} onClick={() => onToggleLayer('Health')}>
+              <AccountCircle />
+            </IconButton>
+          </Tooltip>
         </Paper>
       </Grid>
       <Grid item xs>
         <Paper>
-          <IconButton className={classes.layerSelButton}>
-            <Apartment />
-          </IconButton>
+          <Tooltip title="Attractions">
+            <IconButton className={classes.layerSelButton} onClick={() => onToggleLayer('Attractions')}>
+              <Apartment />
+            </IconButton>
+          </Tooltip>
         </Paper>
       </Grid>
     </Grid>
