@@ -149,6 +149,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     });
   }, [olMap, popup]);
 
+  // Set Basemap
   useEffect(() => {
     if (!olMap) return;
 
@@ -164,10 +165,12 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
             layer: baseLayer.layer,
             matrixSet: baseLayer.tile_matrix_set,
           });
-          olMap.addLayer(new TileLayer({
+          const layer = new TileLayer({
             source: new OLWMTS(options),
             zIndex: -1,
-          }));
+          });
+          layer.set('name', baseLayer.name);
+          olMap.addLayer(layer);
         });
     } else {
       // TODO: Add support for vector tile basemaps
@@ -179,7 +182,11 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     if (!olMap) return;
 
     removeOldLayers();
-    tilesets.forEach((tileset) => {
+
+    const names = olMap!.getLayers().getArray()
+      .map((layer) => layer.get('name'));
+
+    tilesets.filter((tileset) => !names.includes(tileset.name)).forEach((tileset) => {
       // Add layers
       tileset.vector_layers.forEach((layerName, layerIndex) => {
         const vectorTileSource = createVectorTileSource(tileset, layerIndex);
@@ -197,18 +204,9 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
           source: vectorTileSource,
           style,
         });
+        vectorLayer.set('name', tileset.name);
         olMap.addLayer(vectorLayer);
       });
-
-      const layerCenter = transform(
-        [tileset.center[0], tileset.center[1]],
-        'EPSG:4326', 'EPSG:3857',
-      );
-      const updatedView = new View({
-        center: layerCenter,
-        zoom: tileset.center[2],
-      });
-      olMap.setView(updatedView);
     });
   }, [olMap, tilesets, removeOldLayers]);
 
