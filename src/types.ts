@@ -31,11 +31,19 @@ export interface Tileset {
   tiles: string[];
   grids: any[];
   tags: string[];
-  data: any[];
+  data: string[];
   minzoom: number;
   maxzoom: number;
   bounds: number[];
   center: number[];
+  vector_layers: string[];
+  style: any[];
+}
+
+export enum GeometryType {
+  Polygon = '_pl',
+  Point = '_p',
+  Line = '_l'
 }
 
 export enum Attribution {

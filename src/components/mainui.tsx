@@ -5,6 +5,11 @@ import Header from './header';
 import LayerSelector from './layerselector';
 import theme from '../theme';
 
+interface UiProps {
+  onToggleLayer: Function,
+  onToggleBasemap: Function
+}
+
 const useStyles = makeStyles(() => (
   createStyles({
     root: {
@@ -22,7 +27,8 @@ const useStyles = makeStyles(() => (
   })
 ));
 
-export default function MainUI() {
+// eslint-disable-next-line react/prop-types
+export default function MainUI({ onToggleLayer, onToggleBasemap }: UiProps) {
   const classes = useStyles();
 
   return (
@@ -37,10 +43,10 @@ export default function MainUI() {
         xs={12}
       >
         <Grid item className={classes.header}>
-          <Header />
+          <Header onToggleBasemap={onToggleBasemap} />
         </Grid>
         <Grid item>
-          <LayerSelector />
+          <LayerSelector onToggleLayer={onToggleLayer} />
         </Grid>
       </Grid>
     </ThemeProvider>
