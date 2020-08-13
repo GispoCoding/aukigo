@@ -20,9 +20,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": "./"
   },
   "include": [
-    "src"
-  ]
+    "src",
+    "node_modules/ol-mapbox-style/**/*"
+  ],
+  "typeAcquisition": {
+    "exclude": [
+      "ol-mapbox-style"
+    ]
+  }
 }
