@@ -14,6 +14,7 @@ import { transform } from 'ol/proj';
 import { Fill, Stroke, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import MVT from 'ol/format/MVT';
+import { applyStyle } from 'ol-mapbox-style';
 
 import OverlayPositioning from 'ol/OverlayPositioning';
 import { Basemaps, GeometryType, Tileset } from '../types';
@@ -205,7 +206,11 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
           style,
         });
         vectorLayer.set('name', tileset.name);
-        olMap.addLayer(vectorLayer);
+        if (tileset.style) {
+          applyStyle(vectorLayer, tileset.style, layerName).then(() => olMap.addLayer(vectorLayer));
+        } else {
+          olMap.addLayer(vectorLayer);
+        }
       });
     });
   }, [olMap, tilesets, removeOldLayers]);
