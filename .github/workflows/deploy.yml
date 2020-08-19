@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - 31_cd_s3
 
 jobs:
   build-and-deploy:
