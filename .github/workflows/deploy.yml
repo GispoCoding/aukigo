@@ -27,7 +27,10 @@ jobs:
       - name: Install
         run: yarn
       - name: Build
-        run: REACT_APP_SERVER=${{ secrets.SERVER_URL }} yarn run build
+        run: yarn run build
+        env:
+          CI: ""
+          REACT_APP_SERVER: ${{ secrets.SERVER_URL }}
       - name: Deploy app build to S3 bucket
         run: aws s3 sync ./dist/ s3://${{ secrets.AWS_BUCKET_NAME }} --delete
 
