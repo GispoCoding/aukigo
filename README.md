@@ -1,51 +1,30 @@
-Aukigo
+AukiGO
 ===================
 ![](https://github.com/GispoCoding/aukigo/workflows/Tests/badge.svg)
 ![](https://github.com/GispoCoding/aukigo/workflows/Build/badge.svg)
 ![](https://github.com/GispoCoding/aukigo/workflows/Deploy/badge.svg)
 
+<img src="logo/AukiGO_logo.png" alt="AukiGO" width="200" />
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# AukiGO in an application for showcasing services from OpenStreetMap on a mobile friendly map 
 
-## Available Scripts
+This application is designed for fetching service information including opening hours from [OpenStreetMap](www.openstreetmap.org) from a ready defined area. 
 
-In the project directory, you can run:
+AukiGO application can be used for travel purposes and checking the opening hours for different services. At the moment the services are divided into five categories:
 
-### `npm start`
+- Lodging
+- Shops
+- Finance
+- Heath 
+- Attractions
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+AukiGO admin level users can be travel agencies or entrepeneurs, municipalities, cities or NGOs. For country wide application, please consult Gispo Ltd. The idea is to serve the regions travellers and visitors with an easy application shownng the main services available in the region. Compared to e.g. Google Maps, the application shows all the services within the requested categories if they are added to OpenStreetMap. 
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Check out the test service [online](https://aukigo.gispocoding.fi/).
 
-### `npm test`
+## How to get AukiGO working in your area?
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Instructions for starting with AukiGO coming up!
+  
+Or you can ask [Gispo Ltd](www.gispo.fi) for help. We can offer your organisations e.g. hosting services or customize the application to your needs. We can also make corrections to OpenStreetMap informations or train you to use OpenStreetMap and do the corrections by yourself. 
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
