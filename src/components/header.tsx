@@ -1,14 +1,13 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import {
-  createStyles, fade, Theme, makeStyles,
+  createStyles, Theme, makeStyles,
 } from '@material-ui/core/styles';
 import { Search, Settings } from '@material-ui/icons';
-import { Grid } from '@material-ui/core';
+import { Grid, Fab } from '@material-ui/core';
 
 interface HeaderProps {
   onToggleBasemap: Function
@@ -16,7 +15,7 @@ interface HeaderProps {
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.dark,
     flexGrow: 1,
     margin: '30px auto 0 auto',
     pointerEvents: 'auto',
@@ -31,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     marginRight: theme.spacing(2),
   },
   title: {
+    color: '#EDF6F9ff',
     marginLeft: '16px',
     flexGrow: 1,
     pointerEvents: 'none',
@@ -42,12 +42,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   search: {
     position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    margin: '8px 0 8px 8px',
+    borderRadius: '50px',
+    backgroundColor: theme.palette.primary.light,
+    color: '#333333',
+    margin: '8px',
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
@@ -63,9 +61,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputRoot: {
-    color: 'inherit',
-  },
   inputInput: {
     padding: theme.spacing(2, 1, 2, 0),
     // vertical padding + font size from searchIcon
@@ -78,6 +73,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         width: '20ch',
       },
     },
+  },
+  settings: {
+    position: 'absolute',
+    right: '30px',
+    marginTop: '10px',
+    color: theme.palette.primary.light,
   },
 }));
 
@@ -104,17 +105,16 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
             <InputBase
               placeholder="Search…"
               classes={{
-                root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
-          <IconButton color="inherit" onClick={() => onToggleBasemap()}>
-            <Settings />
-          </IconButton>
         </Toolbar>
       </AppBar>
+      <Fab className={classes.settings} color="primary" size="small" onClick={() => onToggleBasemap()}>
+        <Settings />
+      </Fab>
     </Grid>
   );
 }

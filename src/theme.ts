@@ -16,8 +16,24 @@ declare module '@material-ui/core/styles/createMuiTheme' {
 
 const defaultTheme = createMuiTheme({
   palette: {
-    primary: blue,
-    secondary: orange,
+    primary: {
+      main: '#006D77',
+      dark: '#114B5F',
+      light: '#EEEEEE',
+      contrastText: '#333333',
+    },
+  },
+  typography: {
+    fontFamily: [
+      'montserrat',
+      'sans-serif',
+    ].join(','),
+    h1: {
+      fontSize: '24px',
+    },
+    body1: {
+      lineHeight: '1.5',
+    },
   },
   custom: {
     variable: '#000',
