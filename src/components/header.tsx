@@ -15,7 +15,6 @@ interface HeaderProps {
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
-    backgroundColor: theme.palette.primary.dark,
     flexGrow: 1,
     margin: '30px auto 0 auto',
     pointerEvents: 'auto',
@@ -25,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     [theme.breakpoints.down('sm')]: {
       paddingRight: 0,
     },
+  },
+  appBar: {
+    backgroundColor: theme.palette.primary.dark,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -61,6 +63,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  inputRoot: {
+    width: '100%',
+  },
   inputInput: {
     padding: theme.spacing(2, 1, 2, 0),
     // vertical padding + font size from searchIcon
@@ -76,9 +81,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   settings: {
     position: 'absolute',
-    right: '30px',
-    marginTop: '10px',
+    right: '42px',
+    marginTop: '12px',
     color: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.dark,
+    [theme.breakpoints.down('xs')]: {
+      right: '10px',
+    },
   },
 }));
 
@@ -93,7 +102,7 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
       sm={11}
       xs={12}
     >
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar disableGutters>
           <Typography className={classes.title} variant="h6" noWrap>
             aukigo
@@ -105,6 +114,7 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
             <InputBase
               placeholder="Search…"
               classes={{
+                root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
@@ -112,7 +122,7 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
           </div>
         </Toolbar>
       </AppBar>
-      <Fab className={classes.settings} color="primary" size="small" onClick={() => onToggleBasemap()}>
+      <Fab className={classes.settings} size="small" onClick={() => onToggleBasemap()}>
         <Settings />
       </Fab>
     </Grid>
