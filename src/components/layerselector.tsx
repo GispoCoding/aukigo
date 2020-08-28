@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  Grid, makeStyles, createStyles, IconButton, Paper, Theme, Tooltip,
+  Grid, makeStyles, createStyles, Theme,
 } from '@material-ui/core';
 import {
-  AcUnit, Accessible, AccountBalance, AccountCircle, Apartment,
+  Apartment, ShoppingCart, Restaurant, PhotoCamera, LocalHospital, DirectionsBus,
 } from '@material-ui/icons';
+import LayerSelectionButton from './layerselectionbutton';
 
 interface LayerSelectorProps {
   onToggleLayer: Function
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => (
   createStyles({
     root: {
       zIndex: 100,
-      margin: 'auto',
+      margin: '20px auto',
       pointerEvents: 'auto',
       flexGrow: 1,
       [theme.breakpoints.up('md')]: {
@@ -23,18 +24,9 @@ const useStyles = makeStyles((theme: Theme) => (
         right: '30px',
       },
     },
-    layerSelButton: {
-      borderRadius: '50%',
-      backgroundColor: theme.palette.primary.light,
-      width: '100px',
-    },
-    layerSelIconButton: {
-      minWidth: '100%',
-      color: theme.palette.primary.main,
-    },
     layerSelIcon: {
-      width: '2em',
-      height: '2em',
+      margin: '0 auto',
+      width: '60%',
     },
   })
 ));
@@ -54,59 +46,35 @@ export default function LayerSelector({ onToggleLayer }: LayerSelectorProps) {
       sm={11}
       xs={12}
     >
-      <Grid item xs={4}>
-        <Paper className={classes.layerSelButton}>
-          <Tooltip title="Lodging">
-            <IconButton className={classes.layerSelIconButton} onClick={() => onToggleLayer('Lodging')}>
-              <AcUnit className={classes.layerSelIcon} />
-            </IconButton>
-          </Tooltip>
-        </Paper>
+      <Grid item xs={4} sm={2}>
+        <LayerSelectionButton name="Accommodation" onToggleLayer={onToggleLayer}>
+          <Apartment className={classes.layerSelIcon} />
+        </LayerSelectionButton>
       </Grid>
-      <Grid item xs={4}>
-        <Paper className={classes.layerSelButton}>
-          <Tooltip title="Shops">
-            <IconButton className={classes.layerSelIconButton} onClick={() => onToggleLayer('Shops')}>
-              <Accessible className={classes.layerSelIcon} />
-            </IconButton>
-          </Tooltip>
-        </Paper>
+      <Grid item xs={4} sm={2}>
+        <LayerSelectionButton name="Shopping" onToggleLayer={onToggleLayer}>
+          <ShoppingCart className={classes.layerSelIcon} />
+        </LayerSelectionButton>
       </Grid>
-      <Grid item xs={4}>
-        <Paper className={classes.layerSelButton}>
-          <Tooltip title="Finance">
-            <IconButton className={classes.layerSelIconButton} onClick={() => onToggleLayer('Finance')}>
-              <AccountBalance className={classes.layerSelIcon} />
-            </IconButton>
-          </Tooltip>
-        </Paper>
+      <Grid item xs={4} sm={2}>
+        <LayerSelectionButton name="Food" onToggleLayer={onToggleLayer}>
+          <Restaurant className={classes.layerSelIcon} />
+        </LayerSelectionButton>
       </Grid>
-      <Grid item xs={4}>
-        <Paper className={classes.layerSelButton}>
-          <Tooltip title="Health">
-            <IconButton className={classes.layerSelIconButton} onClick={() => onToggleLayer('Health')}>
-              <AccountCircle className={classes.layerSelIcon} />
-            </IconButton>
-          </Tooltip>
-        </Paper>
+      <Grid item xs={4} sm={2}>
+        <LayerSelectionButton name="Transportation" onToggleLayer={onToggleLayer}>
+          <DirectionsBus className={classes.layerSelIcon} />
+        </LayerSelectionButton>
       </Grid>
-      <Grid item xs={4}>
-        <Paper className={classes.layerSelButton}>
-          <Tooltip title="Attractions">
-            <IconButton className={classes.layerSelIconButton} onClick={() => onToggleLayer('Attractions')}>
-              <Apartment className={classes.layerSelIcon} />
-            </IconButton>
-          </Tooltip>
-        </Paper>
+      <Grid item xs={4} sm={2}>
+        <LayerSelectionButton name="Healthcare" onToggleLayer={onToggleLayer}>
+          <LocalHospital className={classes.layerSelIcon} />
+        </LayerSelectionButton>
       </Grid>
-      <Grid item xs={4}>
-        <Paper className={classes.layerSelButton}>
-          <Tooltip title="Attractions">
-            <IconButton className={classes.layerSelIconButton} onClick={() => onToggleLayer('Attractions')}>
-              <Apartment className={classes.layerSelIcon} />
-            </IconButton>
-          </Tooltip>
-        </Paper>
+      <Grid item xs={4} sm={2}>
+        <LayerSelectionButton name="Entertainment" onToggleLayer={onToggleLayer}>
+          <PhotoCamera className={classes.layerSelIcon} />
+        </LayerSelectionButton>
       </Grid>
     </Grid>
   );
