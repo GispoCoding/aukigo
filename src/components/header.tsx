@@ -1,13 +1,13 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import {
   createStyles, Theme, makeStyles,
 } from '@material-ui/core/styles';
 import { Search, Settings } from '@material-ui/icons';
 import { Grid, Fab } from '@material-ui/core';
+import logo from '../static/AukiGO_logo.svg';
 
 interface HeaderProps {
   onToggleBasemap: Function
@@ -31,16 +31,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  title: {
-    color: '#EDF6F9ff',
-    marginLeft: '16px',
+  logoDiv: {
+    float: 'left',
     flexGrow: 1,
+  },
+  logo: {
+    color: '#EDF6F9ff',
+    height: '50px',
+    margin: '0 16px',
     pointerEvents: 'none',
-    userSelect: 'none',
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
   },
   search: {
     position: 'relative',
@@ -104,15 +103,15 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
     >
       <AppBar position="static" className={classes.appBar}>
         <Toolbar disableGutters>
-          <Typography className={classes.title} variant="h6" noWrap>
-            aukigo
-          </Typography>
+          <div className={classes.logoDiv}>
+            <img className={classes.logo} src={logo} alt="aukiGo" />
+          </div>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <Search />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Hae…"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
