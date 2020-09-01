@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme: Theme) => (
       fontWeight: 'bold',
       maxWidth: '150px',
     },
+    openingHours: {
+      maxWidth: '64px',
+    },
     subHeaderRow: {
       fontWeight: 'bold',
       paddingTop: '10px',
@@ -125,8 +128,8 @@ const MapPopup = ({ properties }: PopupProperties) => {
               <table>
                 <tr><td className={classes.title}>{title}</td></tr>
                 <tr><td className={classes.subHeaderRow}>Aukioloajat</td></tr>
-                <tr><td>{openingHours}</td></tr>
-                <tr><td>{c19openingHours}</td></tr>
+                <tr><td className={classes.openingHours}>{openingHours}</td></tr>
+                <tr><td className={classes.openingHours}>{c19openingHours}</td></tr>
               </table>
             </td>
           </tr>
