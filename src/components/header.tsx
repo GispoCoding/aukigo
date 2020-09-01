@@ -16,8 +16,9 @@ interface HeaderProps {
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     flexGrow: 1,
-    margin: '30px auto 0 auto',
+    margin: '0px',
     pointerEvents: 'auto',
+    minHeight: '80px',
     [theme.breakpoints.up('md')]: {
       margin: '30px 30px 0 auto',
     },
@@ -27,6 +28,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   appBar: {
     backgroundColor: theme.palette.primary.dark,
+    minHeight: '80px',
+    boxShadow: '0px 0px 10px 5px #999999',
+  },
+  toolbar: {
+    minHeight: '80px',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -45,9 +51,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     position: 'relative',
     borderRadius: '50px',
     backgroundColor: theme.palette.primary.light,
-    color: '#333333',
-    margin: '8px',
+    color: '#006D77',
+    margin: '20px',
     width: '100%',
+    height: '40px',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
       width: 'auto',
@@ -64,6 +71,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   inputRoot: {
     width: '100%',
+    height: '40px'
   },
   inputInput: {
     padding: theme.spacing(2, 1, 2, 0),
@@ -71,6 +79,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
+    height: '40px',
     [theme.breakpoints.up('sm')]: {
       width: '12ch',
       '&:focus': {
@@ -81,12 +90,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   settings: {
     position: 'absolute',
     right: '42px',
-    marginTop: '12px',
-    color: theme.palette.primary.light,
-    backgroundColor: theme.palette.primary.dark,
+    marginTop: '16px',
+    color: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.light,
+    boxShadow: '0px 0px 10px -2px #999999',
     [theme.breakpoints.down('xs')]: {
       right: '10px',
     },
+    '&:active': {
+      color: theme.palette.primary.light,
+      backgroundColor: theme.palette.primary.main,
+      boxShadow: '0px 0px 10px 5px #999999',
+    },
+    '&:hover': {
+    }
   },
 }));
 
@@ -102,9 +119,9 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
       xs={12}
     >
       <AppBar position="static" className={classes.appBar}>
-        <Toolbar disableGutters>
+        <Toolbar disableGutters className={classes.toolbar}>
           <div className={classes.logoDiv}>
-            <img className={classes.logo} src={logo} alt="aukiGo" />
+            <img className={classes.logo} src={logo} alt="AukiGO" />
           </div>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
