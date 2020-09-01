@@ -7,16 +7,17 @@ import {
 } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import VectorTileLayer from 'ol/layer/VectorTile';
+import VectorSource, { Options as VectorOptions } from 'ol/source/Vector';
+import GeoJsonFormat from 'ol/format/GeoJSON';
 import VectorTileSource, { Options as VectorTileOptions } from 'ol/source/VectorTile';
 import OLWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities';
-import { transform } from 'ol/proj';
 import { Fill, Stroke, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import MVT from 'ol/format/MVT';
-import { applyStyle } from 'ol-mapbox-style';
 
 import OverlayPositioning from 'ol/OverlayPositioning';
+import { FeatureLike } from 'ol/Feature';
 import { Basemaps, GeometryType, Tileset } from '../types';
 
 interface MapProps {
@@ -24,34 +25,36 @@ interface MapProps {
   tilesets: Tileset[]
 }
 
-const mapStyles = {
-  polyStyle: new Style({
-    stroke: new Stroke({
-      color: 'orange',
-      width: 1,
-    }),
-    fill: new Fill({
-      color: 'rgba(20,20,20,0.9',
-    }),
-  }),
-  lineStyle: new Style({
-    stroke: new Stroke({
-      color: '#d900ff',
-      width: 2,
-    }),
-  }),
-  pointStyle: new Style({
-    image: new CircleStyle({
-      radius: 5,
-      fill: new Fill({
-        color: '#666666',
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const styleFunction = (f: FeatureLike) => {
+  if (f.get('name')) {
+    let color = '#999999';
+    if (f.get('currently_open') === true) {
+      color = '#006D77';
+    } else if (f.get('currently_open') === false) {
+      color = '#EEC79F';
+    }
+
+    return new Style({
+      image: new CircleStyle({
+        radius: 5,
+        fill: new Fill({
+          color,
+        }),
       }),
-      stroke: new Stroke({
-        color: '#ffffff',
-        width: 1,
-      }),
-    }),
-  }),
+    });
+  }
+  return undefined;
+};
+
+const selectedStyle = (f: FeatureLike) => {
+  const style = styleFunction(f);
+  if (style) {
+    const image = style!.getImage() as CircleStyle;
+    image.setRadius(8);
+    return style;
+  }
+  return undefined;
 };
 
 const createVectorTileSource = (tileset: Tileset, layerIndex: number): VectorTileSource => {
@@ -83,7 +86,7 @@ const popupContentFromFeatureProperties = (properties: FeatureProperties) => {
 function MapComponent({ basemaps, tilesets }: MapProps) {
   const [olMap, setOlMap] = useState<Map>();
   // eslint-disable-next-line
-  const mapContainerStyle = { height: '100%', width: '100%' };
+  const mapContainerStyle = {height: '100%', width: '100%'};
   const [popup, setPopup] = useState<Overlay>();
 
   const mapRef = useRef(null);
@@ -190,25 +193,38 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     tilesets.filter((tileset) => !names.includes(tileset.name)).forEach((tileset) => {
       // Add layers
       tileset.vector_layers.forEach((layerName, layerIndex) => {
-        const vectorTileSource = createVectorTileSource(tileset, layerIndex);
-
         const ending: string = `_${layerName.split('_').slice(-1)[0]}`;
+        if (ending === GeometryType.Point) {
+          const vectorTileSource = createVectorTileSource(tileset, layerIndex);
 
-        let style: Style = mapStyles.pointStyle;
-        if (ending === GeometryType.Polygon) {
-          style = mapStyles.polyStyle;
-        } else if (ending === GeometryType.Line) {
-          style = mapStyles.lineStyle;
-        }
+          const vectorLayer = new VectorTileLayer({
+            declutter: true,
+            source: vectorTileSource,
+            style: styleFunction,
+          });
 
-        const vectorLayer = new VectorTileLayer({
-          source: vectorTileSource,
-          style,
-        });
-        vectorLayer.set('name', tileset.name);
-        if (tileset.style) {
-          applyStyle(vectorLayer, tileset.style, layerName).then(() => olMap.addLayer(vectorLayer));
-        } else {
+          let selection: string | any[] = [];
+
+          const selLayer = new VectorTileLayer({
+            map: olMap,
+            source: vectorLayer.getSource(),
+            style: (f) => {
+              if (selection.includes(f.get('osmid'))) {
+                return selectedStyle(f);
+              }
+              return undefined;
+            },
+          });
+
+          olMap.on('click', (evt: MapBrowserEvent) => {
+            vectorLayer.getFeatures(evt.pixel).then((features) => {
+              selection = features.map((feature) => feature.get('osmid'));
+              selLayer.changed();
+            });
+          });
+
+          vectorLayer.set('name', tileset.name);
+          selLayer.set('name', tileset.name);
           olMap.addLayer(vectorLayer);
         }
       });
