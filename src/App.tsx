@@ -41,8 +41,7 @@ function App() {
       setTilesets([...tilesets
         .filter((tileset) => tileset.name !== layerName)]);
     } else {
-      setTilesets([...tilesets, ...capabilities!.tilesets
-        .filter((tileset) => tileset.name === layerName)]);
+      setTilesets(capabilities!.tilesets.filter((tileset: Tileset) => tileset.name === layerName));
     }
   }, [capabilities, tilesets]);
 
