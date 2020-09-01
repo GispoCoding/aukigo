@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => (
       width: '70px',
       height: '70px',
       margin: 'auto',
-      boxShadow: '0px 0px 10px -2px #999999',
+      boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
       '&:active': {
         backgroundColor: theme.palette.primary.main,
       },

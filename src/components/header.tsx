@@ -93,14 +93,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     marginTop: '16px',
     color: theme.palette.primary.dark,
     backgroundColor: theme.palette.primary.light,
-    boxShadow: '0px 0px 10px -2px #999999',
+    boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
     [theme.breakpoints.down('xs')]: {
       right: '10px',
     },
     '&:active': {
       color: theme.palette.primary.light,
       backgroundColor: theme.palette.primary.main,
-      boxShadow: '0px 0px 10px 5px #999999',
+      boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
     },
     '&:hover': {
     }
