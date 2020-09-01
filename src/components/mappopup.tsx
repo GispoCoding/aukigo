@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { createStyles, Theme } from '@material-ui/core';
+import { Button, createStyles, Theme } from '@material-ui/core';
+import { Apartment } from '@material-ui/icons';
 
 interface FeatureProperties {
   [key: string]: any,
@@ -12,25 +13,50 @@ interface PopupProperties {
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
-    root: {
-      backgroundColor: theme.palette.primary.light,
-      borderRadius: '50px',
-      color: theme.palette.primary.dark,
+    container: {
+      minWidth: '400px',
+      minHeight: '300px',
       maxWidth: '80vw',
       maxHeight: '80vh',
-      padding: '10px 20px',
+    },
+    root: {
+      backgroundColor: theme.palette.primary.light,
+      borderRadius: '30px 30px 30px 2px',
+      color: theme.palette.primary.dark,
+      float: 'left',
+      padding: '10px 10px 10px 20px',
+      margin: '5px',
+      '&&& td': {
+        paddingRight: '10px',
+      },
+    },
+    iconTd: {
+      width: '64px',
+      height: '64px',
+    },
+    icon: {
+      width: '100%',
+      height: '100%',
+      paddingRight: '20px',
     },
     title: {
       fontSize: '1.2em',
       fontWeight: 'bold',
+      maxWidth: '150px',
     },
     subHeaderRow: {
       fontWeight: 'bold',
+      paddingTop: '10px',
     },
     valueRow: {
     },
     website: {
-      maxWidth: '50px',
+      width: '50px',
+    },
+    infoContainer: {
+      height: '200px',
+      width: '100%',
+      overflow: 'scroll',
     },
   })
 ));
@@ -45,6 +71,8 @@ const MapPopup = ({ properties }: PopupProperties) => {
   const [address, setAddress] = useState<string>('');
   const [openingHours, setOpeningHours] = useState<string>('');
   const [c19openingHours, setC19OpeningHours] = useState<string>('');
+  const [info, setInfo] = useState<string>('');
+  const [showInfo, setShowInfo] = useState<boolean>(false);
   // Set popup content
   useEffect(() => {
     if (properties.unInitialized === true || popupRef.current === null) { return; }
@@ -75,49 +103,72 @@ const MapPopup = ({ properties }: PopupProperties) => {
       setOpeningHours('-');
       setC19OpeningHours('-');
     }
-    // let resultHTML = `<h1>
-    //     ${title}
-    // </h1>
-    // <a href=${website}>${website}</a>
-    // <table>`;
-    // Object.keys(properties).forEach((key) => {
-    //   resultHTML += `<tr>
-    //     <td>${key}<td><td>${properties[key]}</td>
-    //   <tr />`;
-    // });
-    // resultHTML += '</table>';
-    // popupRef.current!.innerHTML = resultHTML;
+    let infoHtml = '<table>';
+    Object.keys(properties).forEach((key) => {
+      infoHtml += `<tr>
+        <td>${key}<td>
+        <td>${properties[key]}</td>
+      <tr />`;
+    });
+    infoHtml += '</table>';
+    setInfo(infoHtml);
   }, [properties]);
   return (
-    <div className={classes.root} ref={popupRef}>
-      <table>
-        <tr>
-          <td>icon</td>
-          <td>
-            <table>
-              <tr><td className={classes.title}>{title}</td></tr>
-              <tr><td>{openingHours}</td></tr>
-              <tr><td>{c19openingHours}</td></tr>
-            </table>
-          </td>
-        </tr>
-        <tr className={classes.subHeaderRow}>
-          <td>Osoite</td>
-          <td>Email</td>
-        </tr>
-        <tr className={classes.valueRow}>
-          <td>{address}</td>
-          <td>{email}</td>
-        </tr>
-        <tr className={classes.subHeaderRow}>
-          <td>Puhelin</td>
-          <td>Lue lisää</td>
-        </tr>
-        <tr className={classes.valueRow}>
-          <td>{phoneNr}</td>
-          <td className={classes.website}><a href={website}>{website}</a></td>
-        </tr>
-      </table>
+    <div className={classes.container}>
+      <div className={classes.root} ref={popupRef}>
+        <table>
+          <tr>
+            <td className={classes.iconTd}>
+              <Apartment className={classes.icon} />
+            </td>
+            <td>
+              <table>
+                <tr><td className={classes.title}>{title}</td></tr>
+                <tr><td className={classes.subHeaderRow}>Aukioloajat</td></tr>
+                <tr><td>{openingHours}</td></tr>
+                <tr><td>{c19openingHours}</td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr className={classes.subHeaderRow}>
+            {address && <td>Osoite</td>}
+            {email && <td>Sähköposti</td>}
+          </tr>
+          <tr className={classes.valueRow}>
+            {address && <td>{address}</td>}
+            {email && <td>{email}</td>}
+          </tr>
+          <tr className={classes.subHeaderRow}>
+            {phoneNr && <td>Puhelin</td>}
+            {website && <td>Lue lisää</td>}
+          </tr>
+          <tr className={classes.valueRow}>
+            {phoneNr && <td>{phoneNr}</td>}
+            {website && <td className={classes.website}><a href={website}>{website}</a></td>}
+          </tr>
+        </table>
+        {showInfo && (
+          <>
+            <Button
+              onClick={() => { setShowInfo(!showInfo); }}
+            >
+              Piilota lisätiedot
+            </Button>
+            <div className={classes.infoContainer}>
+              <div dangerouslySetInnerHTML={{ __html: info }} />
+            </div>
+          </>
+        )}
+        {!showInfo && (
+          <Button
+            onClick={() => { setShowInfo(!showInfo); }}
+          >
+            Näytä lisätiedot
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

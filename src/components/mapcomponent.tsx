@@ -117,7 +117,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
         autoPanAnimation: {
           duration: 250,
         },
-        positioning: OverlayPositioning.CENTER_CENTER,
+        positioning: OverlayPositioning.BOTTOM_LEFT,
       }));
     }
     return () => olMap?.setTarget(undefined);
