@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme: Theme) => (
     },
     layerSelIcon: {
       margin: '0 auto',
-      width: '60%',
+      height: '30px',
+      width: '100%',
     },
   })
 ));
