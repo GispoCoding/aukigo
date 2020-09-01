@@ -10,7 +10,6 @@ import VectorTileLayer from 'ol/layer/VectorTile';
 import VectorTileSource, { Options as VectorTileOptions } from 'ol/source/VectorTile';
 import OLWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities';
-import { transform } from 'ol/proj';
 import { Fill, Stroke, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import MVT from 'ol/format/MVT';
@@ -124,6 +123,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
         positioning: OverlayPositioning.CENTER_CENTER,
       }));
     }
+    window.scrollTo(0, 1);
     return () => olMap?.setTarget(undefined);
   }, [olMap]);
 
