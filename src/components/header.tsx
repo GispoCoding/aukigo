@@ -1,14 +1,13 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import {
-  createStyles, fade, Theme, makeStyles,
+  createStyles, Theme, makeStyles,
 } from '@material-ui/core/styles';
 import { Search, Settings } from '@material-ui/icons';
-import { Grid } from '@material-ui/core';
+import { Grid, Fab } from '@material-ui/core';
+import logo from '../static/AukiGO_logo.svg';
 
 interface HeaderProps {
   onToggleBasemap: Function
@@ -16,10 +15,10 @@ interface HeaderProps {
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
-    backgroundColor: theme.palette.primary.main,
     flexGrow: 1,
-    margin: '30px auto 0 auto',
+    margin: 'auto',
     pointerEvents: 'auto',
+    minHeight: '80px',
     [theme.breakpoints.up('md')]: {
       margin: '30px 30px 0 auto',
     },
@@ -27,28 +26,36 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       paddingRight: 0,
     },
   },
+  appBar: {
+    backgroundColor: theme.palette.primary.dark,
+    minHeight: '80px',
+    boxShadow: '0px 0px 10px 5px #999999',
+  },
+  toolbar: {
+    minHeight: '80px',
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  title: {
-    marginLeft: '16px',
+  logoDiv: {
+    float: 'left',
     flexGrow: 1,
+  },
+  logo: {
+    color: '#EDF6F9ff',
+    filter: 'invert()',
+    height: '50px',
+    margin: '0 16px',
     pointerEvents: 'none',
-    userSelect: 'none',
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
   },
   search: {
     position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    margin: '8px 0 8px 8px',
+    borderRadius: '50px',
+    backgroundColor: theme.palette.primary.light,
+    color: '#006D77',
+    margin: '20px',
     width: '100%',
+    height: '40px',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
       width: 'auto',
@@ -64,7 +71,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     justifyContent: 'center',
   },
   inputRoot: {
-    color: 'inherit',
+    width: '100%',
+    height: '40px',
   },
   inputInput: {
     padding: theme.spacing(2, 1, 2, 0),
@@ -72,11 +80,30 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
+    height: '40px',
     [theme.breakpoints.up('sm')]: {
       width: '12ch',
       '&:focus': {
         width: '20ch',
       },
+    },
+  },
+  settings: {
+    position: 'absolute',
+    right: '42px',
+    marginTop: '16px',
+    color: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.light,
+    boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
+    [theme.breakpoints.down('xs')]: {
+      right: '10px',
+    },
+    '&:active': {
+      color: theme.palette.primary.light,
+      backgroundColor: theme.palette.primary.main,
+      boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
+    },
+    '&:hover': {
     },
   },
 }));
@@ -92,17 +119,17 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
       sm={11}
       xs={12}
     >
-      <AppBar position="static">
-        <Toolbar disableGutters>
-          <Typography className={classes.title} variant="h6" noWrap>
-            aukigo
-          </Typography>
+      <AppBar position="static" className={classes.appBar}>
+        <Toolbar disableGutters className={classes.toolbar}>
+          <div className={classes.logoDiv}>
+            <img className={classes.logo} src={logo} alt="AukiGO" />
+          </div>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <Search />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Hae…"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -110,11 +137,11 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
-          <IconButton color="inherit" onClick={() => onToggleBasemap()}>
-            <Settings />
-          </IconButton>
         </Toolbar>
       </AppBar>
+      <Fab className={classes.settings} size="small" onClick={() => onToggleBasemap()}>
+        <Settings />
+      </Fab>
     </Grid>
   );
 }

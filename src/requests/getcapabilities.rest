@@ -1,1 +1,1 @@
-GET http://ec2-13-53-138-137.eu-north-1.compute.amazonaws.com/api/capabilities/
+GET https://api.aukigo.gispocoding.fi/api/capabilities/
