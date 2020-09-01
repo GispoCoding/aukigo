@@ -53,12 +53,12 @@ export default function LayerSelector({ onToggleLayer }: LayerSelectorProps) {
         </LayerSelectionButton>
       </Grid>
       <Grid item xs={4} sm={2}>
-        <LayerSelectionButton name="Shopping" onToggleLayer={onToggleLayer}>
+        <LayerSelectionButton name="Shops" onToggleLayer={onToggleLayer}>
           <ShoppingCart className={classes.layerSelIcon} />
         </LayerSelectionButton>
       </Grid>
       <Grid item xs={4} sm={2}>
-        <LayerSelectionButton name="Food" onToggleLayer={onToggleLayer}>
+        <LayerSelectionButton name="Restaurant" onToggleLayer={onToggleLayer}>
           <Restaurant className={classes.layerSelIcon} />
         </LayerSelectionButton>
       </Grid>
