@@ -16,7 +16,7 @@ interface HeaderProps {
 const useStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     flexGrow: 1,
-    margin: '0px',
+    margin: 'auto',
     pointerEvents: 'auto',
     minHeight: '80px',
     [theme.breakpoints.up('md')]: {
@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   logo: {
     color: '#EDF6F9ff',
+    filter: 'invert()',
     height: '50px',
     margin: '0 16px',
     pointerEvents: 'none',
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   inputRoot: {
     width: '100%',
-    height: '40px'
+    height: '40px',
   },
   inputInput: {
     padding: theme.spacing(2, 1, 2, 0),
@@ -103,7 +104,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
     },
     '&:hover': {
-    }
+    },
   },
 }));
 
