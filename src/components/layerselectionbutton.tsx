@@ -19,9 +19,13 @@ const useStyles = makeStyles((theme: Theme) => (
     layerSelButton: {
       borderRadius: '50%',
       backgroundColor: theme.palette.primary.light,
-      width: '50px',
-      height: '50px',
+      width: '70px',
+      height: '70px',
       margin: 'auto',
+      boxShadow: '0px 0px 10px -2px #999999',
+      '&:active': {
+        backgroundColor: theme.palette.primary.main,
+      },
     },
     layerSelIconButton: {
       color: theme.palette.primary.main,
@@ -30,6 +34,9 @@ const useStyles = makeStyles((theme: Theme) => (
       width: '100%',
       height: '100%',
       padding: 0,
+      '&:active': {
+        color: theme.palette.primary.light,
+      },
     },
   })
 ));
