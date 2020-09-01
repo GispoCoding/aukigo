@@ -18,7 +18,10 @@ import MVT from 'ol/format/MVT';
 
 import OverlayPositioning from 'ol/OverlayPositioning';
 import { FeatureLike } from 'ol/Feature';
+import { ThemeProvider } from '@material-ui/styles';
 import { Basemaps, GeometryType, Tileset } from '../types';
+import MapPopup from './mappopup';
+import theme from '../theme';
 
 interface MapProps {
   basemaps: Basemaps,
@@ -72,22 +75,12 @@ interface FeatureProperties {
   [key: string]: any,
 }
 
-const popupContentFromFeatureProperties = (properties: FeatureProperties) => {
-  const title = properties.name_fi ? properties.name_fi : properties.name;
-  const website = properties.website ? properties.website : '';
-  let resultHTML = `<h1>${title}</h1><a href=${website}>${website}</a><table>`;
-  Object.keys(properties).forEach((key) => {
-    resultHTML += `<tr><td>${key}<td><td>${properties[key]}</td><tr />`;
-  });
-  resultHTML += '</table>';
-  return resultHTML;
-};
-
 function MapComponent({ basemaps, tilesets }: MapProps) {
   const [olMap, setOlMap] = useState<Map>();
   // eslint-disable-next-line
   const mapContainerStyle = {height: '100%', width: '100%'};
   const [popup, setPopup] = useState<Overlay>();
+  const [popupFeature, setPopupFeature] = useState<FeatureProperties>({ notInitialized: true });
 
   const mapRef = useRef(null);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -124,7 +117,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
         autoPanAnimation: {
           duration: 250,
         },
-        positioning: OverlayPositioning.CENTER_CENTER,
+        positioning: OverlayPositioning.BOTTOM_LEFT,
       }));
     }
     return () => olMap?.setTarget(undefined);
@@ -148,8 +141,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
       }
       popup.setPosition(evt.coordinate);
       popupRef.current.hidden = false;
-      const properties = features[0].getProperties();
-      popupRef.current.innerHTML = popupContentFromFeatureProperties(properties);
+      setPopupFeature(features[0].getProperties());
     });
   }, [olMap, popup]);
 
@@ -234,12 +226,11 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
   return (
     <div style={mapContainerStyle}>
       <div style={mapContainerStyle} ref={mapRef} />
-      <div
-        ref={popupRef}
-        style={{
-          border: '1px solid black', backgroundColor: '#FFF',
-        }}
-      />
+      <ThemeProvider theme={theme}>
+        <div ref={popupRef}>
+          <MapPopup properties={popupFeature} />
+        </div>
+      </ThemeProvider>
     </div>
   );
 }
