@@ -120,6 +120,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
         positioning: OverlayPositioning.BOTTOM_LEFT,
       }));
     }
+    window.scrollTo(0, 1);
     return () => olMap?.setTarget(undefined);
   }, [olMap]);
 

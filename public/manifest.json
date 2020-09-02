@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "aukiGo",
+  "name": "aukiGo by Gispo Ltd.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "fullscreen",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#006D77",
+  "background_color": "#E8EBDD"
 }
