@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => (
       minHeight: '100vh',
       pointerEvents: 'none',
       zIndex: 100,
+      boxShadow: 'inset 0px 0px 20px 0px rgb(0,0,0,0.2)',
     },
     header: {
       flexGrow: 1,
