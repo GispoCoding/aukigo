@@ -109,9 +109,6 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   settings: {
     color: theme.palette.primary.dark,
     boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
-    [theme.breakpoints.down('xs')]: {
-      right: '10px',
-    },
     width: '100%',
     height: '100%',
     '&:active': {
