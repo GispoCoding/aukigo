@@ -106,51 +106,57 @@ const MapPopup = ({ properties }: PopupProperties) => {
       setOpeningHours('-');
       setC19OpeningHours('-');
     }
-    let infoHtml = '<table>';
+    let infoHtml = '<table><tbody>';
     Object.keys(properties).forEach((key) => {
       infoHtml += `<tr>
         <td>${key}<td>
         <td>${properties[key]}</td>
-      <tr />`;
+      </tr>`;
     });
-    infoHtml += '</table>';
+    infoHtml += '</tbody></table>';
     setInfo(infoHtml);
   }, [properties]);
   return (
     <div className={classes.container}>
       <div className={classes.root} ref={popupRef}>
         <table>
-          <tr>
-            <td className={classes.iconTd}>
-              <Apartment className={classes.icon} />
-            </td>
-            <td>
-              <table>
-                <tr><td className={classes.title}>{title}</td></tr>
-                <tr><td className={classes.subHeaderRow}>Aukioloajat</td></tr>
-                <tr><td className={classes.openingHours}>{openingHours}</td></tr>
-                <tr><td className={classes.openingHours}>{c19openingHours}</td></tr>
-              </table>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td className={classes.iconTd}>
+                <Apartment className={classes.icon} />
+              </td>
+              <td>
+                <table>
+                  <tbody>
+                    <tr><td className={classes.title}>{title}</td></tr>
+                    <tr><td className={classes.subHeaderRow}>Aukioloajat</td></tr>
+                    <tr><td className={classes.openingHours}>{openingHours}</td></tr>
+                    <tr><td className={classes.openingHours}>{c19openingHours}</td></tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
         </table>
         <table>
-          <tr className={classes.subHeaderRow}>
-            {address && <td>Osoite</td>}
-            {email && <td>Sähköposti</td>}
-          </tr>
-          <tr className={classes.valueRow}>
-            {address && <td>{address}</td>}
-            {email && <td>{email}</td>}
-          </tr>
-          <tr className={classes.subHeaderRow}>
-            {phoneNr && <td>Puhelin</td>}
-            {website && <td>Lue lisää</td>}
-          </tr>
-          <tr className={classes.valueRow}>
-            {phoneNr && <td>{phoneNr}</td>}
-            {website && <td className={classes.website}><a href={website}>{website}</a></td>}
-          </tr>
+          <tbody>
+            <tr className={classes.subHeaderRow}>
+              {address && <td>Osoite</td>}
+              {email && <td>Sähköposti</td>}
+            </tr>
+            <tr className={classes.valueRow}>
+              {address && <td>{address}</td>}
+              {email && <td>{email}</td>}
+            </tr>
+            <tr className={classes.subHeaderRow}>
+              {phoneNr && <td>Puhelin</td>}
+              {website && <td>Lue lisää</td>}
+            </tr>
+            <tr className={classes.valueRow}>
+              {phoneNr && <td>{phoneNr}</td>}
+              {website && <td className={classes.website}><a href={website}>{website}</a></td>}
+            </tr>
+          </tbody>
         </table>
         {showInfo && (
           <>
