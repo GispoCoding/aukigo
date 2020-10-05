@@ -20,7 +20,11 @@ const useStyles = makeStyles(() => (
       minHeight: '100vh',
       pointerEvents: 'none',
       zIndex: 100,
-      boxShadow: 'inset 0px 0px 20px 0px rgb(0,0,0,0.2)',
+      boxShadow: 'inset 0em 0em 2em 0em hsl(0 0% 0% / 0.1)',
+      background: 'linear-gradient(0deg, rgb(17 75 95 / 0.08), transparent), linear-gradient(0deg, rgb(17 75 95 / 0.1), transparent)',
+      backgroundSize: '100% 40%, 100% 20%',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'bottom center',
     },
     header: {
       flexGrow: 1,

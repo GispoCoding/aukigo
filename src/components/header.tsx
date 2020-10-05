@@ -45,6 +45,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   logoDiv: {
     float: 'left',
     flexGrow: 1,
+    position: 'relative',
+    left: '0.5em',
   },
   logo: {
     color: '#EDF6F9ff',
