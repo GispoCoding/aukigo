@@ -17,6 +17,7 @@ import MVT from 'ol/format/MVT';
 import OverlayPositioning from 'ol/OverlayPositioning';
 import { FeatureLike } from 'ol/Feature';
 import { ThemeProvider } from '@material-ui/styles';
+import { boundingExtent, buffer } from 'ol/extent';
 import { Basemaps, GeometryType, Tileset } from '../types';
 import MapPopup from './mappopup';
 import theme from '../theme';
@@ -128,22 +129,6 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
     if (!olMap.getOverlays().getLength()) olMap.addOverlay(popup);
   }, [olMap, popup]);
 
-  // Create map click event listener
-  useEffect(() => {
-    if (!olMap || !popup) return;
-    olMap.on('click', (evt: MapBrowserEvent) => {
-      if (popupRef.current === null) return;
-      const features = olMap.getFeaturesAtPixel(evt.pixel);
-      if (features.length === 0) {
-        popupRef.current.hidden = true;
-        return;
-      }
-      popup.setPosition(evt.coordinate);
-      popupRef.current.hidden = false;
-      setPopupFeature(features[0].getProperties());
-    });
-  }, [olMap, popup]);
-
   // Set Basemap
   useEffect(() => {
     if (!olMap) return;
@@ -207,12 +192,27 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
             },
           });
 
+          // Create map click event listener
           olMap.on('click', (evt: MapBrowserEvent) => {
-            const features = olMap.getFeaturesAtPixel(evt.pixel);
+            if (!popup || popupRef.current === null) return;
+            let extent = boundingExtent([evt.coordinate]);
+            extent = buffer(extent, 10 * olMap.getView().getResolution());
+            const features = vectorLayer.getSource().getFeaturesInExtent(extent);
+
             selection = features.filter((f) => f.get('osmid'))
               .map((f) => f.get('osmid'));
 
             selLayer.changed();
+
+            // Popup setup
+            if (features.length === 0) {
+              popupRef.current.hidden = true;
+              return;
+            }
+
+            popup.setPosition(evt.coordinate);
+            popupRef.current.hidden = false;
+            setPopupFeature(features[0].getProperties());
           });
 
           vectorLayer.set('name', tileset.name);
@@ -221,7 +221,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
         }
       });
     });
-  }, [olMap, tilesets, removeOldLayers]);
+  }, [olMap, tilesets, removeOldLayers, popup]);
 
   return (
     <div style={mapContainerStyle}>
