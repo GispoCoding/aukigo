@@ -6,7 +6,9 @@ import {
   createStyles, Theme, makeStyles,
 } from '@material-ui/core/styles';
 import { Search, Settings } from '@material-ui/icons';
-import { Grid, Fab } from '@material-ui/core';
+import {
+  Grid, IconButton, Paper, Tooltip,
+} from '@material-ui/core';
 import logo from '../static/AukiGO_logo.svg';
 
 interface HeaderProps {
@@ -91,22 +93,29 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       },
     },
   },
-  settings: {
+  settingsPaper: {
     position: 'absolute',
     right: '42px',
     marginTop: '16px',
-    color: theme.palette.primary.dark,
+    borderRadius: '50%',
     backgroundColor: theme.palette.primary.light,
+    width: '35px',
+    height: '35px',
+    boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
+    '&:active': {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
+  settings: {
+    color: theme.palette.primary.dark,
     boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
     [theme.breakpoints.down('xs')]: {
       right: '10px',
     },
+    width: '100%',
+    height: '100%',
     '&:active': {
       color: theme.palette.primary.light,
-      backgroundColor: theme.palette.primary.main,
-      boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
-    },
-    '&:hover': {
     },
   },
 }));
@@ -142,9 +151,13 @@ export default function Header({ onToggleBasemap }: HeaderProps) {
           </div>
         </Toolbar>
       </AppBar>
-      <Fab className={classes.settings} size="small" onClick={() => onToggleBasemap()}>
-        <Settings />
-      </Fab>
+      <Paper className={classes.settingsPaper}>
+        <IconButton className={classes.settings} onClick={() => onToggleBasemap()}>
+          <Tooltip title="Asetukset">
+            <Settings />
+          </Tooltip>
+        </IconButton>
+      </Paper>
     </Grid>
   );
 }
