@@ -7,12 +7,10 @@ import {
 } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import VectorTileLayer from 'ol/layer/VectorTile';
-import VectorSource, { Options as VectorOptions } from 'ol/source/Vector';
-import GeoJsonFormat from 'ol/format/GeoJSON';
 import VectorTileSource, { Options as VectorTileOptions } from 'ol/source/VectorTile';
 import OLWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import WMTSCapabilities from 'ol/format/WMTSCapabilities';
-import { Fill, Stroke, Style } from 'ol/style';
+import { Fill, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import MVT from 'ol/format/MVT';
 
@@ -210,10 +208,11 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
           });
 
           olMap.on('click', (evt: MapBrowserEvent) => {
-            vectorLayer.getFeatures(evt.pixel).then((features) => {
-              selection = features.map((feature) => feature.get('osmid'));
-              selLayer.changed();
-            });
+            const features = olMap.getFeaturesAtPixel(evt.pixel);
+            selection = features.filter((f) => f.get('osmid'))
+              .map((f) => f.get('osmid'));
+
+            selLayer.changed();
           });
 
           vectorLayer.set('name', tileset.name);
