@@ -27,9 +27,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
   },
   appBar: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: 'unset',
     minHeight: '80px',
-    boxShadow: '0px 0px 10px 5px #999999',
+    boxShadow: '0em 0em 0.9em 0em rgba(11,45,57,0.7)',
+    borderRadius: '0em 0em 2em 2em',
+    background: 'linear-gradient(60deg, #114B5F, transparent)',
+    backgroundSize: '600%',
   },
   toolbar: {
     minHeight: '80px',
