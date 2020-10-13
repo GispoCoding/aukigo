@@ -13,21 +13,25 @@ interface PopupProperties {
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
-    container: {
-      minWidth: '400px',
-      minHeight: '300px',
-      maxWidth: '80vw',
-      maxHeight: '80vh',
-    },
     root: {
       backgroundColor: theme.palette.primary.light,
       borderRadius: '30px 30px 30px 2px',
       color: theme.palette.primary.dark,
-      float: 'left',
       padding: '10px 10px 10px 20px',
       margin: '5px',
       '&&& td': {
         paddingRight: '10px',
+      },
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '0.8em',
+        padding: '2px 4px',
+        minWidth: '200px',
+        position: 'absolute',
+        left: '-100px',
+        bottom: '-50px',
+        '&&& td': {
+          paddingRight: '2px',
+        },
       },
     },
     iconTd: {
@@ -54,7 +58,10 @@ const useStyles = makeStyles((theme: Theme) => (
     valueRow: {
     },
     website: {
-      width: '50px',
+      display: 'block',
+      maxWidth: '150px',
+      overflowX: 'scroll',
+      whiteSpace: 'nowrap',
     },
     infoContainer: {
       height: '200px',
@@ -106,35 +113,39 @@ const MapPopup = ({ properties }: PopupProperties) => {
       setOpeningHours('-');
       setC19OpeningHours('-');
     }
-    let infoHtml = '<table>';
+    let infoHtml = '<table><tbody>';
     Object.keys(properties).forEach((key) => {
       infoHtml += `<tr>
         <td>${key}<td>
         <td>${properties[key]}</td>
-      <tr />`;
+      </tr>`;
     });
-    infoHtml += '</table>';
+    infoHtml += '</tbody></table>';
     setInfo(infoHtml);
   }, [properties]);
   return (
-    <div className={classes.container}>
-      <div className={classes.root} ref={popupRef}>
-        <table>
+    <div className={classes.root} ref={popupRef}>
+      <table>
+        <tbody>
           <tr>
             <td className={classes.iconTd}>
               <Apartment className={classes.icon} />
             </td>
             <td>
               <table>
-                <tr><td className={classes.title}>{title}</td></tr>
-                <tr><td className={classes.subHeaderRow}>Aukioloajat</td></tr>
-                <tr><td className={classes.openingHours}>{openingHours}</td></tr>
-                <tr><td className={classes.openingHours}>{c19openingHours}</td></tr>
+                <tbody>
+                  <tr><td className={classes.title}>{title}</td></tr>
+                  <tr><td className={classes.subHeaderRow}>Aukioloajat</td></tr>
+                  <tr><td className={classes.openingHours}>{openingHours}</td></tr>
+                  <tr><td className={classes.openingHours}>{c19openingHours}</td></tr>
+                </tbody>
               </table>
             </td>
           </tr>
-        </table>
-        <table>
+        </tbody>
+      </table>
+      <table>
+        <tbody>
           <tr className={classes.subHeaderRow}>
             {address && <td>Osoite</td>}
             {email && <td>Sähköposti</td>}
@@ -151,27 +162,27 @@ const MapPopup = ({ properties }: PopupProperties) => {
             {phoneNr && <td>{phoneNr}</td>}
             {website && <td className={classes.website}><a href={website}>{website}</a></td>}
           </tr>
-        </table>
-        {showInfo && (
-          <>
-            <Button
-              onClick={() => { setShowInfo(!showInfo); }}
-            >
-              Piilota lisätiedot
-            </Button>
-            <div className={classes.infoContainer}>
-              <div dangerouslySetInnerHTML={{ __html: info }} />
-            </div>
-          </>
-        )}
-        {!showInfo && (
+        </tbody>
+      </table>
+      {showInfo && (
+        <>
           <Button
             onClick={() => { setShowInfo(!showInfo); }}
           >
-            Näytä lisätiedot
+            Piilota lisätiedot
           </Button>
-        )}
-      </div>
+          <div className={classes.infoContainer}>
+            <div dangerouslySetInnerHTML={{ __html: info }} />
+          </div>
+        </>
+      )}
+      {!showInfo && (
+        <Button
+          onClick={() => { setShowInfo(!showInfo); }}
+        >
+          Näytä lisätiedot
+        </Button>
+      )}
     </div>
   );
 };

@@ -80,6 +80,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
   const mapContainerStyle = {height: '100%', width: '100%'};
   const [popup, setPopup] = useState<Overlay>();
   const [popupFeature, setPopupFeature] = useState<FeatureProperties>({ notInitialized: true });
+  const [popupPosition, setPopupPosition] = useState<Array<number>>();
 
   const mapRef = useRef(null);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -206,13 +207,12 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
 
             // Popup setup
             if (features.length === 0) {
-              popupRef.current.hidden = true;
+              setPopupPosition(undefined);
               return;
             }
 
-            popup.setPosition(evt.coordinate);
-            popupRef.current.hidden = false;
             setPopupFeature(features[0].getProperties());
+            setPopupPosition(evt.coordinate);
           });
 
           vectorLayer.set('name', tileset.name);
@@ -222,6 +222,17 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
       });
     });
   }, [olMap, tilesets, removeOldLayers, popup]);
+
+  // set popup position
+  useEffect(() => {
+    if (!popup || popupRef.current === null) return;
+    if (!popupPosition) {
+      popupRef.current.hidden = true;
+      return;
+    }
+    popup.setPosition(popupPosition);
+    popupRef.current.hidden = false;
+  }, [popup, popupPosition]);
 
   return (
     <div style={mapContainerStyle}>
