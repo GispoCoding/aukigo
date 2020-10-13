@@ -24,7 +24,8 @@ import theme from '../theme';
 
 interface MapProps {
   basemaps: Basemaps,
-  tilesets: Tileset[]
+  tilesets: Tileset[],
+  selectedLayerName: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,7 +75,7 @@ interface FeatureProperties {
   [key: string]: any,
 }
 
-function MapComponent({ basemaps, tilesets }: MapProps) {
+function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
   const [olMap, setOlMap] = useState<Map>();
   // eslint-disable-next-line
   const mapContainerStyle = {height: '100%', width: '100%'};
@@ -239,7 +240,7 @@ function MapComponent({ basemaps, tilesets }: MapProps) {
       <div style={mapContainerStyle} ref={mapRef} />
       <ThemeProvider theme={theme}>
         <div ref={popupRef}>
-          <MapPopup properties={popupFeature} />
+          <MapPopup properties={popupFeature} layerName={selectedLayerName} />
         </div>
       </ThemeProvider>
     </div>

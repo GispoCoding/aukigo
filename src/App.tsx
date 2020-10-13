@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useState,
+} from 'react';
 import './App.css';
 import MapComponent from './components/mapcomponent';
 import MainUI from './components/mainui';
@@ -11,6 +13,7 @@ function App() {
   const [basemaps, setBasemaps] = useState<Basemaps>();
   const [basemapIdx, setBasemapIdx] = useState(0);
   const [tilesets, setTilesets] = useState<Tileset[]>([]);
+  const [selectedLayerName, setSelectedLayerName] = useState<string>('');
 
   // Get capabilities document from backend
   useEffect(() => {
@@ -43,6 +46,7 @@ function App() {
     } else {
       setTilesets(capabilities!.tilesets.filter((tileset: Tileset) => tileset.name === layerName));
     }
+    setSelectedLayerName(layerName);
   }, [capabilities, tilesets]);
 
   // Toggle basemaps TODO: fix to be better
@@ -57,6 +61,7 @@ function App() {
     };
     setBasemapIdx(newBasemapIdx);
     setBasemaps(newBasemaps);
+    // eslint-disable-next-line
   }, [capabilities, basemaps]);
 
   if (loading) {
@@ -65,7 +70,11 @@ function App() {
   return (
     <div className="App">
       <MainUI onToggleLayer={onToggleLayer} onToggleBasemap={onToggleBasemap} />
-      <MapComponent basemaps={basemaps!} tilesets={tilesets!} />
+      <MapComponent
+        basemaps={basemaps!}
+        tilesets={tilesets!}
+        selectedLayerName={selectedLayerName}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Button, createStyles, Theme } from '@material-ui/core';
-import { Apartment } from '@material-ui/icons';
+import MapPopupIcon from './mappopupicon';
 
 interface FeatureProperties {
   [key: string]: any,
@@ -9,6 +9,7 @@ interface FeatureProperties {
 
 interface PopupProperties {
   properties: FeatureProperties,
+  layerName: string
 }
 
 const useStyles = makeStyles((theme: Theme) => (
@@ -33,15 +34,6 @@ const useStyles = makeStyles((theme: Theme) => (
           paddingRight: '2px',
         },
       },
-    },
-    iconTd: {
-      width: '64px',
-      height: '64px',
-    },
-    icon: {
-      width: '100%',
-      height: '100%',
-      paddingRight: '20px',
     },
     title: {
       fontSize: '1.2em',
@@ -71,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) => (
   })
 ));
 
-const MapPopup = ({ properties }: PopupProperties) => {
+const MapPopup = ({ properties, layerName }: PopupProperties) => {
   const classes = useStyles();
   const popupRef = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState<string>('');
@@ -83,6 +75,7 @@ const MapPopup = ({ properties }: PopupProperties) => {
   const [c19openingHours, setC19OpeningHours] = useState<string>('');
   const [info, setInfo] = useState<string>('');
   const [showInfo, setShowInfo] = useState<boolean>(false);
+
   // Set popup content
   useEffect(() => {
     if (properties.unInitialized === true || popupRef.current === null) { return; }
@@ -123,14 +116,13 @@ const MapPopup = ({ properties }: PopupProperties) => {
     infoHtml += '</tbody></table>';
     setInfo(infoHtml);
   }, [properties]);
+
   return (
     <div className={classes.root} ref={popupRef}>
       <table>
         <tbody>
           <tr>
-            <td className={classes.iconTd}>
-              <Apartment className={classes.icon} />
-            </td>
+            <MapPopupIcon layerName={layerName} />
             <td>
               <table>
                 <tbody>
@@ -172,6 +164,7 @@ const MapPopup = ({ properties }: PopupProperties) => {
             Piilota lisätiedot
           </Button>
           <div className={classes.infoContainer}>
+            {/* eslint-disable-next-line */}
             <div dangerouslySetInnerHTML={{ __html: info }} />
           </div>
         </>
