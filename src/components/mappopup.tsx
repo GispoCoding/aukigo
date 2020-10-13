@@ -22,6 +22,17 @@ const useStyles = makeStyles((theme: Theme) => (
       '&&& td': {
         paddingRight: '10px',
       },
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '0.8em',
+        padding: '2px 4px',
+        minWidth: '200px',
+        position: 'absolute',
+        left: '-100px',
+        bottom: '-50px',
+        '&&& td': {
+          paddingRight: '2px',
+        },
+      },
     },
     iconTd: {
       width: '64px',
@@ -47,7 +58,10 @@ const useStyles = makeStyles((theme: Theme) => (
     valueRow: {
     },
     website: {
-      width: '50px',
+      display: 'block',
+      maxWidth: '150px',
+      overflowX: 'scroll',
+      whiteSpace: 'nowrap',
     },
     infoContainer: {
       height: '200px',
