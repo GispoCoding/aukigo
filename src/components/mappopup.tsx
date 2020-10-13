@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { Button, createStyles, Theme } from '@material-ui/core';
+import {
+  Button, createStyles, IconButton, Theme,
+} from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 import MapPopupIcon from './mappopupicon';
 
 interface FeatureProperties {
@@ -9,7 +12,8 @@ interface FeatureProperties {
 
 interface PopupProperties {
   properties: FeatureProperties,
-  layerName: string
+  layerName: string,
+  onClosePopupClicked: Function
 }
 
 const useStyles = makeStyles((theme: Theme) => (
@@ -34,6 +38,10 @@ const useStyles = makeStyles((theme: Theme) => (
           paddingRight: '2px',
         },
       },
+    },
+    closeButton: {
+      float: 'right',
+      padding: '6px',
     },
     title: {
       fontSize: '1.2em',
@@ -63,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) => (
   })
 ));
 
-const MapPopup = ({ properties, layerName }: PopupProperties) => {
+const MapPopup = ({ properties, layerName, onClosePopupClicked }: PopupProperties) => {
   const classes = useStyles();
   const popupRef = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState<string>('');
@@ -119,6 +127,9 @@ const MapPopup = ({ properties, layerName }: PopupProperties) => {
 
   return (
     <div className={classes.root} ref={popupRef}>
+      <IconButton className={classes.closeButton} onClick={() => onClosePopupClicked()} size="small">
+        <Close />
+      </IconButton>
       <table>
         <tbody>
           <tr>
