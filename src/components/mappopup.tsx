@@ -13,17 +13,10 @@ interface PopupProperties {
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
-    container: {
-      minWidth: '400px',
-      minHeight: '300px',
-      maxWidth: '80vw',
-      maxHeight: '80vh',
-    },
     root: {
       backgroundColor: theme.palette.primary.light,
       borderRadius: '30px 30px 30px 2px',
       color: theme.palette.primary.dark,
-      float: 'left',
       padding: '10px 10px 10px 20px',
       margin: '5px',
       '&&& td': {
@@ -117,67 +110,65 @@ const MapPopup = ({ properties }: PopupProperties) => {
     setInfo(infoHtml);
   }, [properties]);
   return (
-    <div className={classes.container}>
-      <div className={classes.root} ref={popupRef}>
-        <table>
-          <tbody>
-            <tr>
-              <td className={classes.iconTd}>
-                <Apartment className={classes.icon} />
-              </td>
-              <td>
-                <table>
-                  <tbody>
-                    <tr><td className={classes.title}>{title}</td></tr>
-                    <tr><td className={classes.subHeaderRow}>Aukioloajat</td></tr>
-                    <tr><td className={classes.openingHours}>{openingHours}</td></tr>
-                    <tr><td className={classes.openingHours}>{c19openingHours}</td></tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table>
-          <tbody>
-            <tr className={classes.subHeaderRow}>
-              {address && <td>Osoite</td>}
-              {email && <td>Sähköposti</td>}
-            </tr>
-            <tr className={classes.valueRow}>
-              {address && <td>{address}</td>}
-              {email && <td>{email}</td>}
-            </tr>
-            <tr className={classes.subHeaderRow}>
-              {phoneNr && <td>Puhelin</td>}
-              {website && <td>Lue lisää</td>}
-            </tr>
-            <tr className={classes.valueRow}>
-              {phoneNr && <td>{phoneNr}</td>}
-              {website && <td className={classes.website}><a href={website}>{website}</a></td>}
-            </tr>
-          </tbody>
-        </table>
-        {showInfo && (
-          <>
-            <Button
-              onClick={() => { setShowInfo(!showInfo); }}
-            >
-              Piilota lisätiedot
-            </Button>
-            <div className={classes.infoContainer}>
-              <div dangerouslySetInnerHTML={{ __html: info }} />
-            </div>
-          </>
-        )}
-        {!showInfo && (
+    <div className={classes.root} ref={popupRef}>
+      <table>
+        <tbody>
+          <tr>
+            <td className={classes.iconTd}>
+              <Apartment className={classes.icon} />
+            </td>
+            <td>
+              <table>
+                <tbody>
+                  <tr><td className={classes.title}>{title}</td></tr>
+                  <tr><td className={classes.subHeaderRow}>Aukioloajat</td></tr>
+                  <tr><td className={classes.openingHours}>{openingHours}</td></tr>
+                  <tr><td className={classes.openingHours}>{c19openingHours}</td></tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table>
+        <tbody>
+          <tr className={classes.subHeaderRow}>
+            {address && <td>Osoite</td>}
+            {email && <td>Sähköposti</td>}
+          </tr>
+          <tr className={classes.valueRow}>
+            {address && <td>{address}</td>}
+            {email && <td>{email}</td>}
+          </tr>
+          <tr className={classes.subHeaderRow}>
+            {phoneNr && <td>Puhelin</td>}
+            {website && <td>Lue lisää</td>}
+          </tr>
+          <tr className={classes.valueRow}>
+            {phoneNr && <td>{phoneNr}</td>}
+            {website && <td className={classes.website}><a href={website}>{website}</a></td>}
+          </tr>
+        </tbody>
+      </table>
+      {showInfo && (
+        <>
           <Button
             onClick={() => { setShowInfo(!showInfo); }}
           >
-            Näytä lisätiedot
+            Piilota lisätiedot
           </Button>
-        )}
-      </div>
+          <div className={classes.infoContainer}>
+            <div dangerouslySetInnerHTML={{ __html: info }} />
+          </div>
+        </>
+      )}
+      {!showInfo && (
+        <Button
+          onClick={() => { setShowInfo(!showInfo); }}
+        >
+          Näytä lisätiedot
+        </Button>
+      )}
     </div>
   );
 };
