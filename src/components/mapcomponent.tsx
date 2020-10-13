@@ -240,12 +240,21 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
     setPopupPosition(undefined);
   }, [selectedLayerName]);
 
+  // hide popup on close button click
+  const onClosePopupClicked = useCallback(() => {
+    setPopupPosition(undefined);
+  }, []);
+
   return (
     <div style={mapContainerStyle}>
       <div style={mapContainerStyle} ref={mapRef} />
       <ThemeProvider theme={theme}>
         <div ref={popupRef}>
-          <MapPopup properties={popupFeature} layerName={selectedLayerName} />
+          <MapPopup
+            properties={popupFeature}
+            layerName={selectedLayerName}
+            onClosePopupClicked={onClosePopupClicked}
+          />
         </div>
       </ThemeProvider>
     </div>
