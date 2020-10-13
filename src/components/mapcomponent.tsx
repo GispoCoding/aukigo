@@ -235,6 +235,11 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
     popupRef.current.hidden = false;
   }, [popup, popupPosition]);
 
+  // hide popup on layer change
+  useEffect(() => {
+    setPopupPosition(undefined);
+  }, [selectedLayerName]);
+
   return (
     <div style={mapContainerStyle}>
       <div style={mapContainerStyle} ref={mapRef} />
