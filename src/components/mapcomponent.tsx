@@ -200,7 +200,7 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
             let extent = boundingExtent([evt.coordinate]);
             extent = buffer(extent, 10 * olMap.getView().getResolution());
             const features = vectorLayer.getSource().getFeaturesInExtent(extent)
-              .filter((f) => f.get('osmid'));
+              .filter((f) => f.get('osmid') && f.get('name'));
 
             // Popup setup
             if (features.length === 0) {
