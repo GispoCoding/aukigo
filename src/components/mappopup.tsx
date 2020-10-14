@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) => (
         fontSize: '0.8em',
         padding: '2px 4px',
         minWidth: '200px',
-        position: 'absolute',
         left: '-100px',
         bottom: '-50px',
         '&&& td': {
