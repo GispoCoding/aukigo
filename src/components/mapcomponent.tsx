@@ -18,6 +18,7 @@ import OverlayPositioning from 'ol/OverlayPositioning';
 import { FeatureLike } from 'ol/Feature';
 import { ThemeProvider } from '@material-ui/styles';
 import { boundingExtent, buffer } from 'ol/extent';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Basemaps, GeometryType, Tileset } from '../types';
 import MapPopup from './mappopup';
 import theme from '../theme';
@@ -85,6 +86,7 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
 
   const mapRef = useRef(null);
   const popupRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Clear layers that are not included
   const removeOldLayers = useCallback(() => {
@@ -118,18 +120,22 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
         autoPanAnimation: {
           duration: 250,
         },
-        positioning: OverlayPositioning.BOTTOM_LEFT,
+        // Use larger margin for desktop to avoid popup getting under the logo banner
+        autoPanMargin: isMobile ? 80 : 110,
+        positioning: isMobile ? OverlayPositioning.BOTTOM_CENTER : OverlayPositioning.BOTTOM_LEFT,
       }));
     }
     window.scrollTo(0, 1);
     return () => olMap?.setTarget(undefined);
-  }, [olMap]);
+  }, [olMap, isMobile]);
 
   // Add popup Overlay to map
   useEffect(() => {
     if (!olMap || !popup) return;
-    if (!olMap.getOverlays().getLength()) olMap.addOverlay(popup);
-  }, [olMap, popup]);
+    olMap.getOverlays().getArray().forEach((overlay) => olMap.removeOverlay(overlay));
+    olMap.addOverlay(popup);
+    setPopupPosition(undefined);
+  }, [olMap, popup, tilesets]);
 
   // Set Basemap
   useEffect(() => {
@@ -228,10 +234,6 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
   // set popup position
   useEffect(() => {
     if (!popup || popupRef.current === null) return;
-    if (!popupPosition) {
-      popupRef.current.hidden = true;
-      return;
-    }
     popup.setPosition(popupPosition);
     popupRef.current.hidden = false;
   }, [popup, popupPosition]);
