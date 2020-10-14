@@ -199,18 +199,19 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
             if (!popup || popupRef.current === null) return;
             let extent = boundingExtent([evt.coordinate]);
             extent = buffer(extent, 10 * olMap.getView().getResolution());
-            const features = vectorLayer.getSource().getFeaturesInExtent(extent);
-
-            selection = features.filter((f) => f.get('osmid'))
-              .map((f) => f.get('osmid'));
-
-            selLayer.changed();
+            const features = vectorLayer.getSource().getFeaturesInExtent(extent)
+              .filter((f) => f.get('osmid') && f.get('name'));
 
             // Popup setup
             if (features.length === 0) {
               setPopupPosition(undefined);
+              selection = [];
+              selLayer.changed();
               return;
             }
+
+            selection = [features[0].get('osmid')]; // features.map((f) => f.get('osmid'));
+            selLayer.changed();
 
             setPopupFeature(features[0].getProperties());
             setPopupPosition(evt.coordinate);
