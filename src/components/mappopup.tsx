@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => (
       color: theme.palette.primary.dark,
       padding: '10px 10px 10px 20px',
       margin: '5px',
-      boxShadow: '0.08em 0.2em 0.5em 0em rgba(9,38,47,0.2), 0em 0em 0em 0.01em rgba(9,38,47,0.1), 0.1em 0.2em 0.5em 0em rgba(9,38,47,0.2)',
+      boxShadow: '0.08em 0.2em 0.5em 0em rgba(9,38,47,0.2), 0em 0em 0em 0.01em rgba(9,38,47,0.1), 0.1em 0.2em 0.5em 0em rgba(9,38,47,0.1)',
       '&&& td': {
         paddingRight: '10px',
       },
