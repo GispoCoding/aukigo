@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme: Theme) => (
   createStyles({
     root: {
       backgroundColor: theme.palette.primary.light,
+      background: 'linear-gradient(200deg, #E8EBDD, #eec79f)',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: '100% 800%',
       borderRadius: '30px 30px 30px 2px',
       color: theme.palette.primary.dark,
       padding: '10px 10px 10px 20px',
