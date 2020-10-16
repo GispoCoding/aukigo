@@ -45,6 +45,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   logoDiv: {
     float: 'left',
     flexGrow: 1,
+    position: 'relative',
+    left: '0.5em',
   },
   logo: {
     color: '#EDF6F9ff',
@@ -95,20 +97,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   settingsPaper: {
     position: 'absolute',
-    right: '42px',
+    right: '3em',
     marginTop: '16px',
     borderRadius: '50%',
     backgroundColor: theme.palette.primary.light,
     width: '35px',
     height: '35px',
-    boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
+    boxShadow: '0.08em 0.2em 0.5em 0em rgba(9,38,47,0.2), 0em 0em 0em 0.01em rgba(9,38,47,0.1)',
     '&:active': {
       backgroundColor: theme.palette.primary.main,
     },
   },
   settings: {
     color: theme.palette.primary.dark,
-    boxShadow: '1px 2px 5px 2px rgba(9,9,9,0.18)',
+    boxShadow: 'unset',
     width: '100%',
     height: '100%',
     '&:active': {
