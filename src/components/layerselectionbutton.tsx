@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme: Theme) => (
       '&:active': {
         backgroundColor: theme.palette.primary.main,
       },
+      '&:focus': {
+        backgroundColor: theme.palette.primary.main,
+      }
     },
     layerSelIconButton: {
       color: theme.palette.primary.main,
@@ -37,6 +40,10 @@ const useStyles = makeStyles((theme: Theme) => (
       '&:active': {
         color: theme.palette.primary.light,
       },
+      '&:focus': {
+        color: theme.palette.primary.light,
+        backgroundColor: theme.palette.primary.main,
+      }
     },
   })
 ));
