@@ -8,7 +8,7 @@
 
 This application is designed for fetching service information including opening hours from [OpenStreetMap](www.openstreetmap.org) in a defined area. 
 
-<img src="public/AukiGO_screenshot.png" alt="AukiGO-käyttöliittymä" width="400"/>
+<img src="public/AukiGO_screenshot.png" alt="AukiGO-käyttöliittymä" width="200"/>
 
 AukiGO application can be used for travel purposes and checking the opening hours for different services. At the moment the services are divided into six categories:
 
