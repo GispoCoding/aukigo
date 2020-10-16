@@ -121,8 +121,8 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
           duration: 250,
         },
         // Use larger margin for desktop to avoid popup getting under the logo banner
-        autoPanMargin: isMobile ? 80 : 110,
-        positioning: isMobile ? OverlayPositioning.BOTTOM_CENTER : OverlayPositioning.BOTTOM_LEFT,
+        autoPanMargin: isMobile ? 20 : 110,
+        positioning: OverlayPositioning.BOTTOM_LEFT,
       }));
     }
     window.scrollTo(0, 1);

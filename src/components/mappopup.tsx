@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => (
       },
       [theme.breakpoints.down('sm')]: {
         fontSize: '0.8em',
-        padding: '2px 4px',
+        padding: '1em',
         minWidth: '200px',
         left: '-100px',
         bottom: '-50px',
