@@ -4,7 +4,7 @@
 ![](https://github.com/GispoCoding/aukigo/workflows/Build/badge.svg)
 ![](https://github.com/GispoCoding/aukigo/workflows/Deploy/badge.svg)
 
-<img src="public/AukiGO_banner.png" alt="AukiGO" width="200"/>
+<img src="public/AukiGO_banner.png" alt="AukiGO" width="600"/>
 
 This application is designed for fetching service information including opening hours from [OpenStreetMap](www.openstreetmap.org) in a defined area. 
 
