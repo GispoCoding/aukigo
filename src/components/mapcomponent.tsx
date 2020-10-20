@@ -151,10 +151,10 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
         .then((text) => {
           const result = parser.read(text);
           const options = optionsFromCapabilities(result, {
-            attributions: baseLayer.attribution,
             layer: baseLayer.layer,
             matrixSet: baseLayer.tile_matrix_set,
           });
+          options.attributions = baseLayer.attribution;
           const layer = new TileLayer({
             source: new OLWMTS(options),
             zIndex: -1,
