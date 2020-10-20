@@ -144,6 +144,11 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
     removeOldLayers();
     if (basemaps.WMTS.length) {
       const baseLayer = basemaps.WMTS[0];
+      if (olMap!.getLayers().getArray()
+        .filter((layer) => layer.get('name') === baseLayer.name).length) {
+        return;
+      }
+
       const parser = new WMTSCapabilities();
       fetch(baseLayer.url)
         .then((response) => response.text())
@@ -190,7 +195,6 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
           let selection: string | any[] = [];
 
           const selLayer = new VectorTileLayer({
-            map: olMap,
             source: vectorLayer.getSource(),
             style: (f) => {
               if (selection.includes(f.get('osmid'))) {
@@ -202,7 +206,8 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
 
           // Create map click event listener
           olMap.on('click', (evt: MapBrowserEvent) => {
-            if (!popup || popupRef.current === null) return;
+            const layersByName = olMap.getLayers().getArray().filter((l) => l.get('name') === tileset.name);
+            if (!popup || popupRef.current === null || !layersByName.length) return;
             let extent = boundingExtent([evt.coordinate]);
             extent = buffer(extent, 10 * olMap.getView().getResolution());
             const features = vectorLayer.getSource().getFeaturesInExtent(extent)
@@ -226,6 +231,7 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
           vectorLayer.set('name', tileset.name);
           selLayer.set('name', tileset.name);
           olMap.addLayer(vectorLayer);
+          olMap.addLayer(selLayer);
         }
       });
     });
