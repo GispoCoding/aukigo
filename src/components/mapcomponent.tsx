@@ -13,6 +13,7 @@ import WMTSCapabilities from 'ol/format/WMTSCapabilities';
 import { Fill, Style } from 'ol/style';
 import CircleStyle from 'ol/style/Circle';
 import MVT from 'ol/format/MVT';
+import { Attribution } from 'ol/control';
 
 import OverlayPositioning from 'ol/OverlayPositioning';
 import { FeatureLike } from 'ol/Feature';
@@ -102,7 +103,7 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
   useEffect(() => {
     setOlMap(new Map({
       target: undefined,
-      controls: [],
+      controls: [new Attribution({ collapsible: false })],
       view: new View({
         center: [2478699.953232, 8501593.815476],
         zoom: 14,
@@ -153,6 +154,7 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
             layer: baseLayer.layer,
             matrixSet: baseLayer.tile_matrix_set,
           });
+          options.attributions = baseLayer.attribution;
           const layer = new TileLayer({
             source: new OLWMTS(options),
             zIndex: -1,
