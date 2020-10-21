@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     minHeight: '80px',
     boxShadow: '0em 0em 0.9em 0em rgba(11,45,57,0.7)',
     borderRadius: '0em 0em 2em 2em',
-    background: 'linear-gradient(60deg, #114B5F, transparent)',
-    backgroundSize: '600%',
+    background: 'linear-gradient(60deg, #114B5F, transparent), linear-gradient(60deg, #EEC79F, transparent)',
+    backgroundSize: '300%',
   },
   toolbar: {
     minHeight: '80px',
