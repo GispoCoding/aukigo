@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   settingsPaper: {
     position: 'absolute',
-    right: '3em',
+    right: '1em',
     marginTop: '16px',
     borderRadius: '50%',
     backgroundColor: theme.palette.primary.light,
