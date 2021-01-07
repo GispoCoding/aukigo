@@ -30,6 +30,8 @@ interface MapProps {
   selectedLayerName: string
 }
 
+const nlsApiKey = process.env.REACT_APP_NLS_API_KEY;
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const styleFunction = (f: FeatureLike) => {
   if (f.get('name')) {
@@ -151,7 +153,11 @@ function MapComponent({ basemaps, tilesets, selectedLayerName }: MapProps) {
       }
 
       const parser = new WMTSCapabilities();
-      fetch(baseLayer.url)
+      let wmtsUrl = baseLayer.url;
+      if (wmtsUrl.includes('avoin-karttakuva.maanmittauslaitos.fi')) {
+        wmtsUrl = `${baseLayer.url}?api-key=${nlsApiKey}`;
+      }
+      fetch(wmtsUrl)
         .then((response) => response.text())
         .then((text) => {
           const result = parser.read(text);
